@@ -1,0 +1,8 @@
+import SwiftUI
+import SafariServices
+import Security
+@main struct SafariContainer:App {
+    @State var token = ""
+    @State var status = ""
+    var body:some Scene {WindowGroup{VStack(alignment:.leading,spacing:20){Image(systemName:"lock.shield.fill").font(.system(size:48)).foregroundStyle(.indigo);Text("JJ Vault for Safari").font(.largeTitle.bold());Text("Pair Safari with the running JJ Vault Mac app. Copy the browser pairing token from the desktop app settings.");SecureField("Browser pairing token",text:$token);Button("Pair Safari"){let group = Bundle.main.object(forInfoDictionaryKey:"JJVaultKeychainGroup") as? String;var q:[String:Any] = [kSecClass as String:kSecClassGenericPassword,kSecAttrService as String:"com.john.jjvault.safari.token",kSecAttrAccount as String:"browser"];if let group{q[kSecAttrAccessGroup as String] = group};guard token.utf8.count >= 32 else{status = "Enter a valid browser pairing token";return};SecItemDelete(q as CFDictionary);q[kSecValueData as String] = Data(token.utf8);q[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly;let result = SecItemAdd(q as CFDictionary,nil);status = result == errSecSuccess ? "Paired. Enable the extension in Safari Settings, Extensions.":"Keychain pairing failed (\(result))";token = ""};Button("Open Safari extension settings"){SFSafariApplication.showPreferencesForExtension(withIdentifier:"com.john.jjvault.safari.extension"){error in if let error{status = error.localizedDescription}}};Text(status).foregroundStyle(.secondary);Text("Use the Safari toolbar button to choose and fill a login. The vault must already be unlocked in JJ Vault.").font(.caption)}.padding(32).frame(width:520)}}
+}

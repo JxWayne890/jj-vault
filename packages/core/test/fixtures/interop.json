@@ -1,0 +1,60 @@
+{
+  "password": "Example fixture password only 2026",
+  "secretKey": "JJ1.tUUzc21-nWfbIplQAyWaw7ckfIzsuXvPBtVQi90N5Gk",
+  "envelope": {
+    "format": "jjvault",
+    "version": 1,
+    "id": "83c29dba-03bc-4979-bec1-447db733fa9c",
+    "kdf": {
+      "algorithm": "argon2id",
+      "salt": "PzKLTquDPXQmYkyG11WKMg==",
+      "memoryKiB": 65536,
+      "iterations": 3,
+      "parallelism": 1
+    },
+    "iv": "0m+ReZdLLwxK70oq",
+    "ciphertext": "Okhda3GeDF/pU3aZUyE/xgApleDQn5dsS8aiw1ex6LADQ7Wd9CUA4JPItnHFsLqLrNDhhgJ1f1cNHXS6Pb5McyBLt+7Xp5ihcM7ERfTBFIklAK3Jb/dS27aNh+b0iDDe1/R30dwHBJm6yFkr6nAudFO3Dv2HIxZY2OOfmZW2g+vhDr9Z2YGGlCEdZMtjqA7jQuKHF4tA+f2y/PPZs05m7vc6ZnA0XUdzSi58A511VMH9V4fsZm8pjWfTYcuu6U92C6rGTL8I2bTxHuNyz8zLdPv/joQDgoN08v6Vvct9IU0diYTdzENij5TrbgjXPAqbCSSQ5QY1IpklSK79OIUovXr7wEoVb0hW2MFL099YRFrAosrgPVm5VMAvbm9QKMinYJ1+Gv9UvakXTIGxc4I3g/vtBGAU2VHca3yI0CFpySbbFoVqy4sXvKKKG1tDRAD2BVmpF/WlJ5kxL8Uu1DnMz3HBXWC+n+7XTGCIfc/btdaA5WzRaU/3W4XRp/FyABJ2Eu56b2osdU1fn/lCme1WIpT+f8TRu9ufJD2m/gnYj8J8gHO6C6beNlcCP/MxxOgq69LWha4RjmrDnjtyPu9+fVSW7Cubd96l0VEQxEtMUL90aSiqmCLS3fvZH1Sf/r4PWcfifzhjb/tVfgxfEJYmuZPe5p+SCnZBsHKgjli7f1MTGLWH9lavyNVJ6cFIdv2r8TEzG5POZhe7wcHMh6/K/S7hwEr+3pxPA1asB0TY5KpMn/+p//ik+gIiJevmWl3VuAQdL33A/OkQ95vRS5+KuirfXSFBOytWZ9OPCQ1S5LOuemgwa6aDOM83qAewzOBuZptGo8ajCcsXxeC6U6OEa8E/vcaCUipG8BJNVQNzMdCamyv/lQ7UKKkV5hfH2VYttB3lTbvYqlrD3T0UF+2aNGGYf6LLmTxQqvXsr78PndnVTew6"
+  },
+  "data": {
+    "schema": 1,
+    "deviceId": "dd925241-7e9e-4b59-a71c-348ac42300f3",
+    "vaults": [
+      {
+        "id": "3556574c-1761-437c-aba1-512e9354652f",
+        "name": "Personal",
+        "allowAssistant": false,
+        "allowBrowser": true,
+        "travelSafe": false
+      },
+      {
+        "id": "fe45976c-5989-4edd-b28d-8a314bdef42d",
+        "name": "MCC Business",
+        "allowAssistant": false,
+        "allowBrowser": true,
+        "travelSafe": false
+      },
+      {
+        "id": "52c8ca6d-87c4-4dc4-895a-cd45b85d69dd",
+        "name": "Social Media",
+        "allowAssistant": false,
+        "allowBrowser": true,
+        "travelSafe": false
+      }
+    ],
+    "items": [],
+    "activity": [
+      {
+        "id": "d838b733-84ed-4c21-87dc-a685d1449d6f",
+        "at": "2026-10-20T22:21:28.089Z",
+        "action": "vault.created"
+      }
+    ],
+    "settings": {
+      "idleMinutes": 5,
+      "travelMode": false,
+      "notifyAssistant": false
+    },
+    "assistantTokens": [],
+    "revision": 0
+  }
+}

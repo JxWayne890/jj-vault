@@ -1,0 +1,126 @@
+name: JJVault
+options:
+  postGenCommand: python3 Scripts/normalize_capabilities.py
+  bundleIdPrefix: com.john.jjvault
+  deploymentTarget:
+    iOS: '18.0'
+    macOS: '14.0'
+settings:
+  base:
+    SWIFT_VERSION: '5.0'
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 0.1.0
+packages:
+  JJVaultKit:
+    path: .
+targets:
+  JJVault:
+    attributes:
+      SystemCapabilities:
+        com.apple.ApplicationGroups.iOS:
+          enabled: 1
+        com.apple.Keychain:
+          enabled: 1
+        com.apple.Push:
+          enabled: 1
+    type: application
+    platform: iOS
+    sources: [Sources/JJVaultApp]
+    dependencies:
+      - package: JJVaultKit
+        product: JJVaultCore
+      - target: JJVaultAutoFill
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.john.jjvault
+        INFOPLIST_FILE: App-Info.plist
+        TARGETED_DEVICE_FAMILY: '1,2'
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: JJ Vault
+        INFOPLIST_KEY_NSFaceIDUsageDescription: Unlock your encrypted JJ Vault using Face ID.
+        INFOPLIST_KEY_NSCameraUsageDescription: Scan authenticator QR codes into your encrypted vault.
+        INFOPLIST_KEY_NSLocalNetworkUsageDescription: Sync an encrypted vault with your own relay.
+        INFOPLIST_KEY_JJVaultKeychainGroup: $(AppIdentifierPrefix)com.john.jjvault.shared
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        CODE_SIGN_ENTITLEMENTS: JJVault.entitlements
+  JJVaultAutoFill:
+    attributes:
+      SystemCapabilities:
+        com.apple.ApplicationGroups.iOS:
+          enabled: 1
+        com.apple.Keychain:
+          enabled: 1
+        com.apple.AutoFillCredentialProvider:
+          enabled: 1
+    type: app-extension
+    platform: iOS
+    sources: [Sources/JJVaultAutoFill]
+    dependencies:
+      - package: JJVaultKit
+        product: JJVaultCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.john.jjvault.autofill
+        INFOPLIST_FILE: AutoFill-Info.plist
+        CODE_SIGN_ENTITLEMENTS: AutoFill.entitlements
+        SKIP_INSTALL: YES
+        APPLICATION_EXTENSION_API_ONLY: YES
+  JJVaultSafari:
+    type: application
+    platform: macOS
+    sources: [Sources/JJVaultSafariApp]
+    dependencies:
+      - target: JJVaultSafariExtension
+        embed: true
+      - target: JJVaultMacProvider
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.john.jjvault.safari
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_FILE: SafariApp-Info.plist
+        INFOPLIST_KEY_CFBundleDisplayName: JJ Vault Safari
+        INFOPLIST_KEY_JJVaultKeychainGroup: $(AppIdentifierPrefix)com.john.jjvault.safari.shared
+        CODE_SIGN_ENTITLEMENTS: SafariApp.entitlements
+  JJVaultSafariExtension:
+    type: app-extension
+    platform: macOS
+    sources:
+      - Sources/JJVaultSafari
+      - path: SafariResources
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.john.jjvault.safari.extension
+        INFOPLIST_FILE: Safari-Info.plist
+        CODE_SIGN_ENTITLEMENTS: SafariExtension.entitlements
+        SKIP_INSTALL: YES
+        APPLICATION_EXTENSION_API_ONLY: YES
+  JJVaultMacProvider:
+    type: app-extension
+    platform: macOS
+    sources: [Sources/JJVaultMacAutoFill]
+    attributes:
+      SystemCapabilities:
+        com.apple.AutoFillCredentialProvider:
+          enabled: 1
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.john.jjvault.safari.provider
+        INFOPLIST_FILE: MacProvider-Info.plist
+        CODE_SIGN_ENTITLEMENTS: MacProvider.entitlements
+        SKIP_INSTALL: YES
+        APPLICATION_EXTENSION_API_ONLY: YES
+schemes:
+  JJVault:
+    build:
+      targets:
+        JJVault: all
+  JJVaultSafari:
+    build:
+      targets:
+        JJVaultSafari: all

@@ -1,0 +1,88 @@
+{
+  "name": "jj-vault",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Personal encrypted vault with local assistant access",
+  "scripts": {
+    "build": "tsx tools/build.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test packages/core/test/*.test.ts packages/service/test/*.test.ts extensions/browser/test/*.test.ts",
+    "start": "electron dist/desktop/main.cjs",
+    "dev": "npm run build && npm start",
+    "cli": "tsx packages/service/src/cli.ts",
+    "sync-server": "tsx packages/service/src/sync-server.ts",
+    "package:mac": "npm run build && tsx tools/package-mac.ts",
+    "test:desktop": "tsx tools/test-desktop.ts",
+    "test:agents": "tsx tools/test-agent-management.ts",
+    "test:session": "tsx tools/test-session-resume.ts",
+    "build:extensions": "tsx extensions/browser/build.ts",
+    "build:apple": "./apple/build.sh",
+    "test:browser": "tsx extensions/browser/test/flow.ts",
+    "test:browser-pairing": "tsx tools/test-browser-pairing.ts",
+    "test:apple": "swift test --package-path apple",
+    "test:phone": "tsx tools/test-phone-pairing.ts",
+    "chrome:check": "node tools/check-browser-connection.mjs",
+    "test:chrome-connection": "node --test tools/check-browser-connection.test.mjs",
+    "test:hosted-relay": "npm --prefix apps/hosted-relay test",
+    "release:preflight": "python3 tools/release-preflight.py",
+    "build:biometric": "./apple/build.sh --helper-only"
+  },
+  "dependencies": {
+    "hash-wasm": "4.12.0",
+    "tldts": "^7.0.0",
+    "fflate": "^0.8.2",
+    "pdf-lib": "^1.17.1",
+    "jsqr": "^1.4.0",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "zod": "^3.25.0",
+    "qrcode": "1.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.3",
+    "tsx": "^4.20.0",
+    "esbuild": "^0.25.0",
+    "electron": "44.9.2",
+    "electron-builder": "^26.0.0",
+    "@playwright/test": "^1.56.0",
+    "@types/qrcode": "1.5.6"
+  },
+  "build": {
+    "appId": "com.john.jjvault",
+    "productName": "JJ Vault",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "hardenedRuntime": true,
+      "icon": "assets/icon.icns",
+      "extendInfo": {
+        "NSLocalNetworkUsageDescription": "Allow your iPhone to connect to JJ Vault on this Mac for encrypted local network sync."
+      }
+    },
+    "extraResources": [
+      {
+        "from": "apple/build/JJBiometric",
+        "to": "JJBiometric"
+      }
+    ]
+  },
+  "main": "dist/desktop/main.cjs",
+  "license": "MIT",
+  "engines": {
+    "node": "24.x"
+  },
+  "overrides": {
+    "app-builder-lib": {
+      "@electron/get": {
+        "global-agent": "4.1.3"
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "item": {
+    "id": "11111111-2222-4333-a444-555555555555",
+    "title": "Café 🗝",
+    "vaultId": "vault",
+    "type": "login",
+    "updatedAt": "2099-01-01T00:00:00.000Z",
+    "createdAt": "2026-10-20T00:00:00.000Z",
+    "fields": [
+      {
+        "value": "x/y",
+        "label": "é",
+        "kind": "text"
+      }
+    ],
+    "urls": [
+      "https://example.com"
+    ],
+    "allowAssistant": true,
+    "passwordHistory": [
+      {
+        "password": "fixture only",
+        "changedAt": "2026-10-20T00:00:00.000Z"
+      }
+    ],
+    "passkey": {
+      "rpId": "example.com",
+      "backedUp": true
+    },
+    "favorite": false,
+    "archived": false
+  },
+  "canonical": "{\"archived\":false,\"createdAt\":\"2026-10-20T00:00:00.000Z\",\"favorite\":false,\"fields\":[{\"kind\":\"text\",\"label\":\"é\",\"value\":\"x/y\"}],\"id\":\"11111111-2222-4333-a444-555555555555\",\"passkey\":{\"rpId\":\"example.com\"},\"title\":\"Café 🗝\",\"type\":\"login\",\"updatedAt\":\"2099-01-01T00:00:00.000Z\",\"urls\":[\"https://example.com\"],\"vaultId\":\"vault\"}",
+  "expectedId": "9efb278d-8f75-4230-a247-a4c4a8ab5e61"
+}

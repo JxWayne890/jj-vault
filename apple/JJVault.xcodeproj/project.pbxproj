@@ -1,0 +1,898 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0AF2963F6F9110ACB7E8FA3C /* JJVaultMacProvider.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 169D26148A438F590366273F /* JJVaultMacProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2067F285EFC5C6D89ABF9218 /* PrivacyShield.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAD52488FC1F43F43EC7A71F /* PrivacyShield.swift */; };
+		31D9474E5BA01030E10B3EDA /* JJVaultSafariExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 98DB29CA38D76B8ABC28B3DD /* JJVaultSafariExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		37CB327B526502DD695478B3 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 5034BF9EE5CD45553C0B688B /* popup.js */; };
+		3B4F4B115C4E32AFF5BA6B1C /* CredentialProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388B5C7417151BE2E3F78A60 /* CredentialProvider.swift */; };
+		3D9171031B2D17966AE48112 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F718E284BE44BF03D5EA7A53 /* SafariWebExtensionHandler.swift */; };
+		44C9935BFAB2E921A70EBB6E /* CredentialProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96B608A724A39C20DB9F794 /* CredentialProvider.swift */; };
+		520F8C48FA83A985A01AC091 /* JJVaultAutoFill.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 01C2E2C521711215252A8C53 /* JJVaultAutoFill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5E1FCBC685FBD80F29F6A91D /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 48750EBABC1ED89290C99C1E /* background.js */; };
+		5EA40787917555E97C4EA8AD /* SafariApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11190AE4F082E0778F68002D /* SafariApp.swift */; };
+		6CE875CD3674F456DF2A11E7 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = D2291AFA98998F5F572D251B /* manifest.json */; };
+		75E25F3740B718A187778A0E /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 72F4B7BECE4D571645997171 /* popup.css */; };
+		7AD2823322E16B44855F6BDC /* JJVaultApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE84D00C4D16C64E3C026D1 /* JJVaultApp.swift */; };
+		7B1BC182554F7A5F6983688D /* QRScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD2A566FFD998D42E895F15 /* QRScanner.swift */; };
+		7CC347A97E8539DFAC8642E0 /* icon.svg in Resources */ = {isa = PBXBuildFile; fileRef = AB3D3A19BDE88F271905D5EA /* icon.svg */; };
+		89D2B849401B406D79A08853 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0379F87B7ADD769855479D2F /* Settings.swift */; };
+		9516590ECBCBF47D9861AC03 /* JJVaultCore in Frameworks */ = {isa = PBXBuildFile; productRef = E7708638574A99CD59ABA176 /* JJVaultCore */; };
+		962B7CFF8289B3BEC70BB971 /* JJVaultCore in Frameworks */ = {isa = PBXBuildFile; productRef = 25964EF02BA5F41DCFA368DB /* JJVaultCore */; };
+		9ADEAA5940D5419D2B8A2F73 /* popup.js.map in Resources */ = {isa = PBXBuildFile; fileRef = 069C9351C6A70CA10DB3B6F1 /* popup.js.map */; };
+		B668665CCFFE1FBD4B1C2BC6 /* RelayPairingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C864EA850E9C42848E29A4EC /* RelayPairingView.swift */; };
+		CFBAF2061160D68ABF473DEB /* PhoneNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = C64C8F07D4F83C91544797D0 /* PhoneNotifications.swift */; };
+		DA25F49CF967C9033063E6C1 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = F45CC02AA5FE7E48AD02290F /* popup.html */; };
+		F1C8ACFEA9AC164CB7AE2790 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 5C5B5C8470D027802DF755A8 /* content.js */; };
+		FFD675FE68E74C7D90C72CC7 /* ProviderClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C61D5F0E11B2DF69D999F91E /* ProviderClient.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4DF2F962B6031472CFA00267 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F34C9475B37220BD1EF416AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0963B2F21510CF705828AB85;
+			remoteInfo = JJVaultMacProvider;
+		};
+		632311BAA307AD9F45779E5C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F34C9475B37220BD1EF416AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4657C64FBD8472F9AF4ED0DA;
+			remoteInfo = JJVaultSafariExtension;
+		};
+		73C2329A72ACEC8DE1E5FD83 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F34C9475B37220BD1EF416AF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 60531384C8F01DFBC848FE1B;
+			remoteInfo = JJVaultAutoFill;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1E502D2A52338253F08B3E5B /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				520F8C48FA83A985A01AC091 /* JJVaultAutoFill.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		39B0DB6048A8991AA3C9D325 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				31D9474E5BA01030E10B3EDA /* JJVaultSafariExtension.appex in Embed Foundation Extensions */,
+				0AF2963F6F9110ACB7E8FA3C /* JJVaultMacProvider.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		01C2E2C521711215252A8C53 /* JJVaultAutoFill.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = JJVaultAutoFill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0379F87B7ADD769855479D2F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		069C9351C6A70CA10DB3B6F1 /* popup.js.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = popup.js.map; sourceTree = "<group>"; };
+		11190AE4F082E0778F68002D /* SafariApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariApp.swift; sourceTree = "<group>"; };
+		11D9880A5A57160F064A69FA /* apple */ = {isa = PBXFileReference; lastKnownFileType = folder; name = apple; path = .; sourceTree = SOURCE_ROOT; };
+		169D26148A438F590366273F /* JJVaultMacProvider.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = JJVaultMacProvider.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C72218BB71A70B315DC9FBE /* JJVault.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = JJVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		388B5C7417151BE2E3F78A60 /* CredentialProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProvider.swift; sourceTree = "<group>"; };
+		3EE84D00C4D16C64E3C026D1 /* JJVaultApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JJVaultApp.swift; sourceTree = "<group>"; };
+		48750EBABC1ED89290C99C1E /* background.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = background.js; sourceTree = "<group>"; };
+		5034BF9EE5CD45553C0B688B /* popup.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = popup.js; sourceTree = "<group>"; };
+		5C5B5C8470D027802DF755A8 /* content.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
+		6DD2A566FFD998D42E895F15 /* QRScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScanner.swift; sourceTree = "<group>"; };
+		72F4B7BECE4D571645997171 /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = popup.css; sourceTree = "<group>"; };
+		98DB29CA38D76B8ABC28B3DD /* JJVaultSafariExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = JJVaultSafariExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AAD52488FC1F43F43EC7A71F /* PrivacyShield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyShield.swift; sourceTree = "<group>"; };
+		AB3D3A19BDE88F271905D5EA /* icon.svg */ = {isa = PBXFileReference; path = icon.svg; sourceTree = "<group>"; };
+		C61D5F0E11B2DF69D999F91E /* ProviderClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderClient.swift; sourceTree = "<group>"; };
+		C64C8F07D4F83C91544797D0 /* PhoneNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNotifications.swift; sourceTree = "<group>"; };
+		C864EA850E9C42848E29A4EC /* RelayPairingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayPairingView.swift; sourceTree = "<group>"; };
+		D2291AFA98998F5F572D251B /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
+		DF990B7C7F1AD3CF99D49FC6 /* JJVaultSafari.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JJVaultSafari.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E96B608A724A39C20DB9F794 /* CredentialProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProvider.swift; sourceTree = "<group>"; };
+		F45CC02AA5FE7E48AD02290F /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = popup.html; sourceTree = "<group>"; };
+		F718E284BE44BF03D5EA7A53 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6779A556F5C706E19410DAD2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				962B7CFF8289B3BEC70BB971 /* JJVaultCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9EA10E8499A511CDB3F48F62 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9516590ECBCBF47D9861AC03 /* JJVaultCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		01B7FF2F12371039D6A5E170 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2C72218BB71A70B315DC9FBE /* JJVault.app */,
+				01C2E2C521711215252A8C53 /* JJVaultAutoFill.appex */,
+				169D26148A438F590366273F /* JJVaultMacProvider.appex */,
+				DF990B7C7F1AD3CF99D49FC6 /* JJVaultSafari.app */,
+				98DB29CA38D76B8ABC28B3DD /* JJVaultSafariExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		11E488A995C7602031701A27 /* JJVaultAutoFill */ = {
+			isa = PBXGroup;
+			children = (
+				E96B608A724A39C20DB9F794 /* CredentialProvider.swift */,
+			);
+			name = JJVaultAutoFill;
+			path = Sources/JJVaultAutoFill;
+			sourceTree = "<group>";
+		};
+		13BD1CB5E551DEA6D79F9CD3 /* JJVaultSafari */ = {
+			isa = PBXGroup;
+			children = (
+				F718E284BE44BF03D5EA7A53 /* SafariWebExtensionHandler.swift */,
+			);
+			name = JJVaultSafari;
+			path = Sources/JJVaultSafari;
+			sourceTree = "<group>";
+		};
+		368787880679E007EACF8691 /* JJVaultMacAutoFill */ = {
+			isa = PBXGroup;
+			children = (
+				388B5C7417151BE2E3F78A60 /* CredentialProvider.swift */,
+				C61D5F0E11B2DF69D999F91E /* ProviderClient.swift */,
+			);
+			name = JJVaultMacAutoFill;
+			path = Sources/JJVaultMacAutoFill;
+			sourceTree = "<group>";
+		};
+		64C1290D5696847F0CCDFBC2 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				11D9880A5A57160F064A69FA /* apple */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		AB5BA17E4F5B85888253AE89 = {
+			isa = PBXGroup;
+			children = (
+				F23910CB14FD6ED3FB691686 /* JJVaultApp */,
+				11E488A995C7602031701A27 /* JJVaultAutoFill */,
+				368787880679E007EACF8691 /* JJVaultMacAutoFill */,
+				13BD1CB5E551DEA6D79F9CD3 /* JJVaultSafari */,
+				DC86C8D797122E21DCCB1D0E /* JJVaultSafariApp */,
+				64C1290D5696847F0CCDFBC2 /* Packages */,
+				EED4D352198DCF53EE287E5B /* SafariResources */,
+				01B7FF2F12371039D6A5E170 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DC86C8D797122E21DCCB1D0E /* JJVaultSafariApp */ = {
+			isa = PBXGroup;
+			children = (
+				11190AE4F082E0778F68002D /* SafariApp.swift */,
+			);
+			name = JJVaultSafariApp;
+			path = Sources/JJVaultSafariApp;
+			sourceTree = "<group>";
+		};
+		EED4D352198DCF53EE287E5B /* SafariResources */ = {
+			isa = PBXGroup;
+			children = (
+				48750EBABC1ED89290C99C1E /* background.js */,
+				5C5B5C8470D027802DF755A8 /* content.js */,
+				AB3D3A19BDE88F271905D5EA /* icon.svg */,
+				D2291AFA98998F5F572D251B /* manifest.json */,
+				72F4B7BECE4D571645997171 /* popup.css */,
+				F45CC02AA5FE7E48AD02290F /* popup.html */,
+				5034BF9EE5CD45553C0B688B /* popup.js */,
+				069C9351C6A70CA10DB3B6F1 /* popup.js.map */,
+			);
+			path = SafariResources;
+			sourceTree = "<group>";
+		};
+		F23910CB14FD6ED3FB691686 /* JJVaultApp */ = {
+			isa = PBXGroup;
+			children = (
+				3EE84D00C4D16C64E3C026D1 /* JJVaultApp.swift */,
+				C64C8F07D4F83C91544797D0 /* PhoneNotifications.swift */,
+				AAD52488FC1F43F43EC7A71F /* PrivacyShield.swift */,
+				6DD2A566FFD998D42E895F15 /* QRScanner.swift */,
+				C864EA850E9C42848E29A4EC /* RelayPairingView.swift */,
+				0379F87B7ADD769855479D2F /* Settings.swift */,
+			);
+			name = JJVaultApp;
+			path = Sources/JJVaultApp;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0963B2F21510CF705828AB85 /* JJVaultMacProvider */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 91A24E26E21E64E3CC7654B5 /* Build configuration list for PBXNativeTarget "JJVaultMacProvider" */;
+			buildPhases = (
+				6530BE3984C171EF20E84CCF /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JJVaultMacProvider;
+			packageProductDependencies = (
+			);
+			productName = JJVaultMacProvider;
+			productReference = 169D26148A438F590366273F /* JJVaultMacProvider.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		4657C64FBD8472F9AF4ED0DA /* JJVaultSafariExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43AF6BDEB829312412E6D055 /* Build configuration list for PBXNativeTarget "JJVaultSafariExtension" */;
+			buildPhases = (
+				2078AB47997BA3BC482173AC /* Sources */,
+				A855BABC35828486F54A4071 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JJVaultSafariExtension;
+			packageProductDependencies = (
+			);
+			productName = JJVaultSafariExtension;
+			productReference = 98DB29CA38D76B8ABC28B3DD /* JJVaultSafariExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		60531384C8F01DFBC848FE1B /* JJVaultAutoFill */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4748BCFC253D8CCB969D14BD /* Build configuration list for PBXNativeTarget "JJVaultAutoFill" */;
+			buildPhases = (
+				9E994CDAB0C0250F8E6F8862 /* Sources */,
+				9EA10E8499A511CDB3F48F62 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JJVaultAutoFill;
+			packageProductDependencies = (
+				E7708638574A99CD59ABA176 /* JJVaultCore */,
+			);
+			productName = JJVaultAutoFill;
+			productReference = 01C2E2C521711215252A8C53 /* JJVaultAutoFill.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B84A4E62511D6E0D22B0B56E /* JJVaultSafari */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CF0F3381B3E1572B249FADD7 /* Build configuration list for PBXNativeTarget "JJVaultSafari" */;
+			buildPhases = (
+				4A0C4BFF5D4546FC23E095CC /* Sources */,
+				39B0DB6048A8991AA3C9D325 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5C4E85D580257833AC663177 /* PBXTargetDependency */,
+				12DDCDF66C53413B869CFA1E /* PBXTargetDependency */,
+			);
+			name = JJVaultSafari;
+			packageProductDependencies = (
+			);
+			productName = JJVaultSafari;
+			productReference = DF990B7C7F1AD3CF99D49FC6 /* JJVaultSafari.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D9F88DD9FB3577FF9E622713 /* JJVault */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB254FC1C85F2DA15276F3D8 /* Build configuration list for PBXNativeTarget "JJVault" */;
+			buildPhases = (
+				F990B9CA9C37C52BA9BC6C9F /* Sources */,
+				6779A556F5C706E19410DAD2 /* Frameworks */,
+				1E502D2A52338253F08B3E5B /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8AD43264924DBE31300D6801 /* PBXTargetDependency */,
+			);
+			name = JJVault;
+			packageProductDependencies = (
+				25964EF02BA5F41DCFA368DB /* JJVaultCore */,
+			);
+			productName = JJVault;
+			productReference = 2C72218BB71A70B315DC9FBE /* JJVault.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F34C9475B37220BD1EF416AF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					0963B2F21510CF705828AB85 = {
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.AutoFillCredentialProvider = {
+								enabled = 1;
+							};
+						};
+					};
+					4657C64FBD8472F9AF4ED0DA = {
+						ProvisioningStyle = Automatic;
+					};
+					60531384C8F01DFBC848FE1B = {
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.AutoFillCredentialProvider = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
+					};
+					B84A4E62511D6E0D22B0B56E = {
+						ProvisioningStyle = Automatic;
+					};
+					D9F88DD9FB3577FF9E622713 = {
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 4C5FFDF208EA4D4B9664321B /* Build configuration list for PBXProject "JJVault" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = AB5BA17E4F5B85888253AE89;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CA8B89F620B6D58D02604A30 /* XCLocalSwiftPackageReference "." */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 01B7FF2F12371039D6A5E170 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D9F88DD9FB3577FF9E622713 /* JJVault */,
+				60531384C8F01DFBC848FE1B /* JJVaultAutoFill */,
+				B84A4E62511D6E0D22B0B56E /* JJVaultSafari */,
+				4657C64FBD8472F9AF4ED0DA /* JJVaultSafariExtension */,
+				0963B2F21510CF705828AB85 /* JJVaultMacProvider */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A855BABC35828486F54A4071 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5E1FCBC685FBD80F29F6A91D /* background.js in Resources */,
+				F1C8ACFEA9AC164CB7AE2790 /* content.js in Resources */,
+				7CC347A97E8539DFAC8642E0 /* icon.svg in Resources */,
+				6CE875CD3674F456DF2A11E7 /* manifest.json in Resources */,
+				75E25F3740B718A187778A0E /* popup.css in Resources */,
+				DA25F49CF967C9033063E6C1 /* popup.html in Resources */,
+				37CB327B526502DD695478B3 /* popup.js in Resources */,
+				9ADEAA5940D5419D2B8A2F73 /* popup.js.map in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2078AB47997BA3BC482173AC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D9171031B2D17966AE48112 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A0C4BFF5D4546FC23E095CC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EA40787917555E97C4EA8AD /* SafariApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6530BE3984C171EF20E84CCF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B4F4B115C4E32AFF5BA6B1C /* CredentialProvider.swift in Sources */,
+				FFD675FE68E74C7D90C72CC7 /* ProviderClient.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9E994CDAB0C0250F8E6F8862 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44C9935BFAB2E921A70EBB6E /* CredentialProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F990B9CA9C37C52BA9BC6C9F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AD2823322E16B44855F6BDC /* JJVaultApp.swift in Sources */,
+				CFBAF2061160D68ABF473DEB /* PhoneNotifications.swift in Sources */,
+				2067F285EFC5C6D89ABF9218 /* PrivacyShield.swift in Sources */,
+				7B1BC182554F7A5F6983688D /* QRScanner.swift in Sources */,
+				B668665CCFFE1FBD4B1C2BC6 /* RelayPairingView.swift in Sources */,
+				89D2B849401B406D79A08853 /* Settings.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		12DDCDF66C53413B869CFA1E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0963B2F21510CF705828AB85 /* JJVaultMacProvider */;
+			targetProxy = 4DF2F962B6031472CFA00267 /* PBXContainerItemProxy */;
+		};
+		5C4E85D580257833AC663177 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4657C64FBD8472F9AF4ED0DA /* JJVaultSafariExtension */;
+			targetProxy = 632311BAA307AD9F45779E5C /* PBXContainerItemProxy */;
+		};
+		8AD43264924DBE31300D6801 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 60531384C8F01DFBC848FE1B /* JJVaultAutoFill */;
+			targetProxy = 73C2329A72ACEC8DE1E5FD83 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0118E62DB241B4F748EE95E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = SafariExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Safari-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.john.jjvault.safari.extension;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		12779A58FCC3EBDF277D6D1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = SafariExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Safari-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.john.jjvault.safari.extension;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		150FE47667A67E218516F9F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		57B870E1367C376D35400AB1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = MacProvider.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "MacProvider-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.john.jjvault.safari.provider;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		7CA25A14999376D80715BC07 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SafariApp.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "SafariApp-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "JJ Vault Safari";
+				INFOPLIST_KEY_JJVaultKeychainGroup = "$(AppIdentifierPrefix)com.john.jjvault.safari.shared";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.john.jjvault.safari;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		915A97E6BA35111F53E4FB49 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = AutoFill.entitlements;
+				INFOPLIST_FILE = "AutoFill-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.john.jjvault.autofill;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		91DD9198DA54214621F4371D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = JJVault.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "JJ Vault";
+				INFOPLIST_KEY_JJVaultKeychainGroup = "$(AppIdentifierPrefix)com.john.jjvault.shared";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan authenticator QR codes into your encrypted vault.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Unlock your encrypted JJ Vault using Face ID.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Sync an encrypted vault with your own relay.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.john.jjvault;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A7EB31CF67309D4F538A40FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AD90B07AA802C7084D81748A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = JJVault.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "JJ Vault";
+				INFOPLIST_KEY_JJVaultKeychainGroup = "$(AppIdentifierPrefix)com.john.jjvault.shared";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan authenticator QR codes into your encrypted vault.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Unlock your encrypted JJ Vault using Face ID.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Sync an encrypted vault with your own relay.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.john.jjvault;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CA12035A2E9EA8DD5BEC686D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = AutoFill.entitlements;
+				INFOPLIST_FILE = "AutoFill-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.john.jjvault.autofill;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F2DE6C25BE746A76A6AAAB6B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SafariApp.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "SafariApp-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "JJ Vault Safari";
+				INFOPLIST_KEY_JJVaultKeychainGroup = "$(AppIdentifierPrefix)com.john.jjvault.safari.shared";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.john.jjvault.safari;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		FBE2FC3E74BBD8F1A4BE3F05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = MacProvider.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "MacProvider-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.john.jjvault.safari.provider;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		43AF6BDEB829312412E6D055 /* Build configuration list for PBXNativeTarget "JJVaultSafariExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12779A58FCC3EBDF277D6D1C /* Debug */,
+				0118E62DB241B4F748EE95E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4748BCFC253D8CCB969D14BD /* Build configuration list for PBXNativeTarget "JJVaultAutoFill" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA12035A2E9EA8DD5BEC686D /* Debug */,
+				915A97E6BA35111F53E4FB49 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4C5FFDF208EA4D4B9664321B /* Build configuration list for PBXProject "JJVault" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				150FE47667A67E218516F9F5 /* Debug */,
+				A7EB31CF67309D4F538A40FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		91A24E26E21E64E3CC7654B5 /* Build configuration list for PBXNativeTarget "JJVaultMacProvider" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBE2FC3E74BBD8F1A4BE3F05 /* Debug */,
+				57B870E1367C376D35400AB1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CB254FC1C85F2DA15276F3D8 /* Build configuration list for PBXNativeTarget "JJVault" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				91DD9198DA54214621F4371D /* Debug */,
+				AD90B07AA802C7084D81748A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CF0F3381B3E1572B249FADD7 /* Build configuration list for PBXNativeTarget "JJVaultSafari" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F2DE6C25BE746A76A6AAAB6B /* Debug */,
+				7CA25A14999376D80715BC07 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		CA8B89F620B6D58D02604A30 /* XCLocalSwiftPackageReference "." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = .;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		25964EF02BA5F41DCFA368DB /* JJVaultCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JJVaultCore;
+		};
+		E7708638574A99CD59ABA176 /* JJVaultCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JJVaultCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = F34C9475B37220BD1EF416AF /* Project object */;
+}

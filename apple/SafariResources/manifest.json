@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "JJ Vault",
+  "version": "0.1.0",
+  "description": "Fill your logins, one time codes, cards, and addresses from your local JJ Vault.",
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "nativeMessaging"
+  ],
+  "host_permissions": [
+    "https://*/*"
+  ],
+  "action": {
+    "default_title": "JJ Vault",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "32": "icon32.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+L",
+        "mac": "Command+Shift+L"
+      }
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; connect-src 'none'"
+  }
+}

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>JJ Vault</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+  <header><img src="icon.svg" width="37" height="37" alt=""><div><h1>JJ Vault</h1><span class="subtitle">A little peace of mind.</span></div><span id="connection" class="connection" role="status">Connecting</span></header>
+  <main>
+    <div class="websiteRow"><span class="siteGlyph">↗</span><div><span class="eyebrow">FILLING ON</span><strong id="website">Your current website</strong></div><button id="refresh" class="iconButton" title="Refresh vault connection" aria-label="Refresh vault connection">↻</button></div>
+    <div class="toolbar"><label class="search"><span>⌕</span><input id="search" type="search" placeholder="Search your vault" aria-label="Search matching vault items" autofocus autocomplete="off"></label><select id="typeFilter" aria-label="Item type"><option value="">All items</option><option value="login">Logins</option><option value="creditCard">Cards</option><option value="identity">Identities</option></select></div>
+    <div class="sectionLabel"><span>AVAILABLE FOR THIS WEBSITE</span><span id="count">0 items</span></div>
+    <div id="items" class="items" aria-label="Matching vault items"></div>
+    <p id="status" class="status" role="status" aria-live="polite">Connecting to JJ Vault on your Mac…</p>
+    <section id="capture" class="capture" hidden><div class="captureHeading"><span class="captureSymbol">+</span><div><h2>Save this login?</h2><p id="saveUser"></p></div><button id="dismiss" class="iconButton" aria-label="Dismiss saved login offer" title="Dismiss">×</button></div><form id="saveForm"><label class="fieldLabel" for="saveTitle">NAME</label><input id="saveTitle" maxlength="512" required autocomplete="off"><label class="fieldLabel" for="saveTarget">SAVE TO VAULT</label><select id="saveTarget"></select><p class="finePrint">Only saved when you confirm. This offer expires after 90 seconds.</p><button class="primary" type="submit">Confirm save</button></form></section>
+    <details class="setup"><summary>Connect this browser</summary><p>Open and unlock the JJ Vault Mac app. Enable browser access for a vault. Register this extension ID using the browser host installer.</p><code id="extensionId"></code><p>See the browser setup guide included with JJ Vault. Your master password is never entered here.</p></details>
+  </main>
+  <footer><span class="lock">◈</span> Only you choose what gets filled. <kbd>⌘ ⇧ L</kbd></footer>
+  <script src="popup.js"></script>
+</body></html>
