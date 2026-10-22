@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   verify:
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 25
     env:
       JJ_VAULT_TEST_BROWSER_CHANNEL: chromium
@@ -36,6 +36,8 @@ jobs:
         run: npm run build
       - name: Test core, service, and browser units
         run: npm test
+      - name: Test Swift core and format interoperability
+        run: JJ_VAULT_NODE_SOURCE="$PWD" swift test --package-path apple
       - name: Test browser installer and connection checks
         run: |
           npx tsx --test tools/test-browser-install.ts

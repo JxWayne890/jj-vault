@@ -37,6 +37,8 @@ No Vercel or Supabase project was created or changed. The installed desktop app 
 | Swift core and JavaScript interoperability | 17 tests passed across the suite and optional interoperability run |
 | Native biometric helper compilation and signature verification | Passed |
 | Ad hoc Mac app packaging, signature and isolated startup | Passed |
+| Packaged agent helper without Node on PATH | Passed |
+| Packaged browser pairing and actual Electron bridge | Passed |
 | npm dependency audit | Zero findings across production and build dependencies |
 
 Desktop checks exercise actual local services, encrypted files and native framing with synthetic credentials. Browser pairing checks exercise the actual desktop handler and generated Electron launcher, including caller rejection and locked or disabled vaults. The controlled Chrome flow checks exact website matching, login and authenticator filling, cards, identity, hidden fields, foreign forms, frames, navigation changes and explicit save review. Its mocked bridge does not establish that a regular Chrome profile loaded and connected the extension.
