@@ -10,7 +10,9 @@ The owner confirmed Chrome connection, successful login filling, adding a new lo
 
 The source has 159 passing core, service and browser tests, with additional installer, desktop, packaging, Swift and hosted relay checks. This release has not received an independent security audit.
 
-Build from source with Node.js 24, npm and Xcode Command Line Tools. Chrome requires Developer mode, manual loading and pairing. No notarized installer or Chrome Web Store download is included.
+Build the Mac app from source with Node.js 24, npm and Xcode Command Line Tools. [Download the built Chrome extension](https://github.com/JxWayne890/jj-vault/releases/download/v0.1.0-beta.1/JJ-Vault-Chrome-0.1.0.zip), extract it, then use Chrome's **Developer mode** and **Load unpacked** to select the `JJ-Vault-Chrome` folder. Copy the assigned ID into the Mac app's browser connection settings and pair it. The [installation guide](https://github.com/JxWayne890/jj-vault/blob/main/docs/CHROME-SETUP.md) has the complete steps.
+
+The extension ZIP and its [SHA256 checksum](https://github.com/JxWayne890/jj-vault/releases/download/v0.1.0-beta.1/JJ-Vault-Chrome-0.1.0.zip.sha256) are included. The extension needs the running, unlocked Mac app and updates manually. No notarized Mac installer or Chrome Web Store download is included.
 
 The optional Supabase and Vercel component stores encrypted snapshots and shares. It does not provide a complete hosted vault or agent access while the Mac is off. iPhone, Safari and Apple AutoFill support remain experimental.
 

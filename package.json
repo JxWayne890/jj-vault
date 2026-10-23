@@ -17,6 +17,8 @@
     "test:agents": "tsx tools/test-agent-management.ts",
     "test:session": "tsx tools/test-session-resume.ts",
     "build:extensions": "tsx extensions/browser/build.ts",
+    "package:chrome": "npm run build:extensions && tsx tools/package-chrome.ts",
+    "test:chrome-package": "tsx --test tools/test-chrome-package.ts",
     "build:apple": "./apple/build.sh",
     "test:browser": "tsx extensions/browser/test/flow.ts",
     "test:browser-pairing": "tsx tools/test-browser-pairing.ts",

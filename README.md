@@ -2,7 +2,9 @@
 
 JJ Vault is a personal password manager for macOS with permissioned access for local AI agents. Each owner runs a separate app and keeps a separate encrypted vault. Local storage is the default. A hosted service is optional.
 
-This is an early source beta candidate. See the [beta release notes](docs/BETA-RELEASE.md), check the [release readiness report](docs/RELEASE-READINESS.md) for the current verification status and read the [security reporting policy](SECURITY.md) before using important information. The candidate combines recovered desktop and Apple source with reviewed release fixes. iPhone, Safari, and AutoFill support remain experimental.
+This is an early source beta. See the [beta release](https://github.com/JxWayne890/jj-vault/releases/tag/v0.1.0-beta.1), check the [release readiness report](docs/RELEASE-READINESS.md) for the current verification status and read the [security reporting policy](SECURITY.md) before using important information. The source combines recovered desktop and Apple source with reviewed release fixes. iPhone, Safari, and AutoFill support remain experimental.
+
+**Chrome extension:** [Download the built extension](https://github.com/JxWayne890/jj-vault/releases/download/v0.1.0-beta.1/JJ-Vault-Chrome-0.1.0.zip) and follow the [installation guide](docs/CHROME-SETUP.md). The extension requires the JJ Vault Mac app described below. It does not include the Mac app.
 
 ## What it supports
 
@@ -36,7 +38,11 @@ Export an encrypted `.jjbackup` file, keep it separately from the Emergency Kit,
 
 ## Chrome
 
-After building, open `chrome://extensions`, enable Developer mode, and load `dist/extensions/chrome` from this checkout. Copy the assigned extension ID into JJ Vault's browser connection settings and choose **Pair extension**. The app installs its native bridge and uses its own runtime. Restart Chrome and complete the synthetic fill, save, and locked vault checks in the [Chrome setup guide](docs/CHROME-SETUP.md).
+With the Mac app installed and unlocked, [download the Chrome extension ZIP](https://github.com/JxWayne890/jj-vault/releases/download/v0.1.0-beta.1/JJ-Vault-Chrome-0.1.0.zip), extract it into a stable local folder, open `chrome://extensions`, enable Developer mode, and choose **Load unpacked**. Select the extracted `JJ-Vault-Chrome` folder containing `manifest.json`. JJ Vault then appears on Chrome's Extensions page.
+
+Copy its assigned extension ID into the Mac app under **Settings**, **Browser connection**, **Extension ID**, then choose **Pair extension**. Enable **Browser autofill** for the intended vault, restart Chrome and pin the toolbar icon. The [Chrome setup guide](docs/CHROME-SETUP.md) has the complete steps and connection checks.
+
+Source developers can build and load `dist/extensions/chrome` instead. `npm run package:chrome` builds a separate extension ZIP and SHA256 checksum in `release`. The beta ZIP is a manual installation. A Chrome Web Store listing is required for the normal **Add to Chrome** route.
 
 An unpacked extension needs manual loading and reloading in Chrome. Keep its folder and the app in stable locations. Source test results alone do not verify a particular Chrome profile.
 
@@ -62,6 +68,7 @@ npm run build
 npm test
 npx tsx --test tools/test-browser-install.ts
 npm run test:chrome-connection
+npm run test:chrome-package
 npm run test:hosted-relay
 ```
 

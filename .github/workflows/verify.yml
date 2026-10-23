@@ -36,6 +36,10 @@ jobs:
         run: npm run build
       - name: Test core, service, and browser units
         run: npm test
+      - name: Verify Chrome release package
+        run: |
+          npm run test:chrome-package
+          npx tsx tools/package-chrome.ts
       - name: Test Swift core and format interoperability
         run: JJ_VAULT_NODE_SOURCE="$PWD" swift test --package-path apple
       - name: Test browser installer and connection checks

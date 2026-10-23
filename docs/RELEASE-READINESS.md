@@ -2,7 +2,7 @@
 
 Review updated: October 23, 2026.
 
-Status: source beta candidate, prepared for a private draft GitHub prerelease. The owner has confirmed that the loaded Chrome popup reports Connected, fills a saved login successfully and refuses access while the vault is locked. The owner also confirmed saving a new login in JJ Vault. iPhone, Safari and AutoFill support remain experimental. The optional hosted component is an encrypted relay, and a full hosted password manager remains future work.
+Status: source beta prepared for public GitHub publication with the owner's approval. A separate built Chrome extension ZIP provides manual installation without compiling the browser code. The owner has confirmed that the loaded Chrome popup reports Connected, fills a saved login successfully and refuses access while the vault is locked. The owner also confirmed saving a new login in JJ Vault. iPhone, Safari and AutoFill support remain experimental. The optional hosted component is an encrypted relay, and a full hosted password manager remains future work.
 
 No Vercel or Supabase project was created or changed. The tested app was installed locally with the previous app backed up, and the owner vault was not moved or replaced. Functional tests used disposable synthetic data. The live native host probe requested an invalid item ID and was rejected before lookup; no saved owner credentials were retrieved.
 
@@ -68,4 +68,4 @@ Parts of the original working folder were iCloud placeholders. The candidate was
 
 All candidate source is resident and testable. The original folder and history remain preserved. The candidate uses fresh Git history with selected source only. Internal recovery records, generated screenshots, dependencies, built applications, tokens and vault data are excluded. The automated preflight checks source metadata, selected literal signatures and the release index. Its result is an assembly check, not security certification.
 
-The candidate is ready for a draft source beta with the documented verification limits. Keep the repository and release draft private until the owner chooses public source publication. See the [beta release notes](BETA-RELEASE.md). Do not describe it as a completed hosted password manager, verified iPhone release or independently audited consumer download.
+The owner has approved public source publication, including search visibility. The beta is prepared with the documented verification limits. The built Chrome ZIP contains only selected public extension files and installation instructions, with a separate SHA256 checksum. It requires Developer mode, manual loading and pairing with the separately running Mac app. A Chrome Web Store listing remains a separate publication step. See the [beta release notes](BETA-RELEASE.md). Do not describe it as a completed hosted password manager, verified iPhone release or independently audited consumer download.
