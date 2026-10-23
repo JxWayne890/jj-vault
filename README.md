@@ -2,7 +2,7 @@
 
 JJ Vault is a personal password manager for macOS with permissioned access for local AI agents. Each owner runs a separate app and keeps a separate encrypted vault. Local storage is the default. A hosted service is optional.
 
-This is an early source release candidate. Check the [release readiness report](docs/RELEASE-READINESS.md) for the current verification status and read the [security reporting policy](SECURITY.md) before using important information. The candidate combines recovered desktop and Apple source with reviewed release fixes. iPhone, Safari, and AutoFill support remain experimental.
+This is an early source beta candidate. See the [beta release notes](docs/BETA-RELEASE.md), check the [release readiness report](docs/RELEASE-READINESS.md) for the current verification status and read the [security reporting policy](SECURITY.md) before using important information. The candidate combines recovered desktop and Apple source with reviewed release fixes. iPhone, Safari, and AutoFill support remain experimental.
 
 ## What it supports
 

@@ -2,7 +2,7 @@
 
 Verification updated: October 23, 2026.
 
-The Chrome source and desktop pairing flow pass the checks below. The owner loaded the extension manually, provided its ID and confirmed that the actual Chrome popup reports Connected after pairing on October 23. The owner also confirmed that selecting a saved login and clicking Fill populated the page fields successfully. Saving and locked vault denial through that actual popup remain unverified.
+The Chrome source and desktop pairing flow pass the checks below. The owner loaded the extension manually, provided its ID and confirmed that the actual Chrome popup reports Connected after pairing on October 23. The owner also confirmed that selecting a saved login and clicking Fill populated the page fields successfully, adding a new login to JJ Vault succeeded and browser access is refused while the vault is locked. The route used to save that entry was not recorded, so extension capture and Confirm save remain separately unverified through the installed popup.
 
 The tested app was installed locally with the previous app preserved as a backup. The owner vault was not moved or replaced. Automated functional tests use synthetic data. A real native host probe authenticated to the running app and was rejected for an invalid item ID before any item lookup. The read only connection diagnostic opens no saved login, vault or browser token.
 
@@ -22,10 +22,12 @@ The tested app was installed locally with the previous app preserved as a backup
 | Actual native host to app probe | Passed | Paired caller and browser token accepted, invalid item rejected before lookup, wrong caller refused |
 | Actual Chrome popup connection | Confirmed by owner | Popup reports Connected after refreshing the corrected pairing |
 | Actual Chrome login fill | Confirmed by owner | Saved login fields filled successfully on the page |
+| New login saved in JJ Vault | Confirmed by owner | A new entry was added successfully; save route was not recorded |
+| Actual Chrome locked vault refusal | Confirmed by owner | Browser access is refused while the vault is locked |
 
 The controlled Chrome flow checks username, current password and authenticator codes, cards, identity fields, hidden fields, foreign forms, navigation changes, frames and trusted submit capture. Popup tests check explicit fill, top frame targeting, explicit save, preservation of a username during a password only update, and cancellation after navigation.
 
-The isolated pairing test uses the actual desktop handler, generated launcher, Electron runtime and local vault service. The automated Chrome flow supplies a mocked native bridge. The owner confirmation separately establishes that the regular Chrome extension can reach the registered native host and app. The owner has now also confirmed a successful fill through that actual popup. Saving and denial checks through the installed extension still require a live controlled flow.
+The isolated pairing test uses the actual desktop handler, generated launcher, Electron runtime and local vault service. The automated Chrome flow supplies a mocked native bridge. The owner confirmation separately establishes that the regular Chrome extension can reach the registered native host and app, fill a login and refuse access while locked. A new vault entry was also saved. Extension capture and Confirm save, disabled vault isolation and the other hostile form boundaries still require a live controlled flow before they can be described as verified in the installed extension.
 
 ## Read only connection diagnostic
 
@@ -65,9 +67,9 @@ It never executes the launcher or runtime, opens the JavaScript bundles or nativ
 
 An incomplete or unsafe setup returns a nonzero exit code. A configured result means these selected installation checks passed. Every result keeps `liveAutofillVerified` set to `false`. Bundle integrity, extension loading, service availability, and live filling require separate checks.
 
-## Remaining live verification
+## Additional live verification
 
-Installation, the Connected popup status and a successful login fill are confirmed by the owner. Before claiming saving and all denial boundaries are verified through the installed extension, run a controlled flow using a temporary vault and synthetic credentials. Setup instructions remain in [CHROME-SETUP.md](CHROME-SETUP.md).
+Installation, the Connected popup status, a successful login fill, a newly saved vault entry and locked vault refusal are confirmed by the owner. Before claiming extension capture and all denial boundaries are verified through the installed extension, complete the additional controlled coverage below using a temporary vault and synthetic credentials. The checklist also includes repeatable setup and the already confirmed locked state check. Setup instructions remain in [CHROME-SETUP.md](CHROME-SETUP.md).
 
 1. In regular Chrome, confirm JJ Vault is loaded, enabled, and has no extension errors. Pair the exact extension ID with the local native host.
 2. Run the connection diagnostic and resolve every failure. Confirm the JJ Vault app is running and browser access is enabled only for the temporary vault.
@@ -77,4 +79,4 @@ Installation, the Connected popup status and a successful login fill are confirm
 6. Submit synthetic credentials, review the save offer, and confirm the vault changes only after Confirm save. Verify a password only update preserves the existing username.
 7. Confirm activity records the expected browser actions without including credentials. Remove the temporary fixture records after verification.
 
-Record the Chrome version, extension ID privately, diagnostic result, tested actions, and any failures. A successful controlled flow with the real installed bridge is the remaining evidence needed for a live Chrome confirmation.
+Record the Chrome version, extension ID privately, diagnostic result, tested actions, and any failures. A successful controlled flow with the real installed bridge would extend the current owner confirmations to explicit extension capture and the additional denial boundaries.
