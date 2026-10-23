@@ -2,7 +2,7 @@
 
 Review updated: October 23, 2026.
 
-Status: private source candidate. The owner has confirmed that the loaded Chrome popup reports Connected. Live filling and saving still require verification. iPhone, Safari and AutoFill support remain experimental. The optional hosted component is an encrypted relay, and a full hosted password manager remains future work.
+Status: private source candidate. The owner has confirmed that the loaded Chrome popup reports Connected and fills a saved login successfully. Live saving and locked vault denial through that installed popup still require verification. iPhone, Safari and AutoFill support remain experimental. The optional hosted component is an encrypted relay, and a full hosted password manager remains future work.
 
 No Vercel or Supabase project was created or changed. The tested app was installed locally with the previous app backed up, and the owner vault was not moved or replaced. Functional tests used disposable synthetic data. The live native host probe requested an invalid item ID and was rejected before lookup; no saved owner credentials were retrieved.
 
@@ -40,15 +40,16 @@ No Vercel or Supabase project was created or changed. The tested app was install
 | Packaged agent helper without Node on PATH | Passed |
 | Packaged browser pairing and actual Electron bridge | Passed |
 | Actual installed Chrome popup to local app | Owner confirmed Connected |
+| Actual installed Chrome login fill | Owner confirmed fields filled successfully |
 | npm dependency audit | Zero findings across production and build dependencies |
 
-Desktop checks exercise actual local services, encrypted files and native framing with synthetic credentials. Browser pairing checks exercise the actual desktop handler and generated Electron launcher, including caller rejection and locked or disabled vaults. The controlled Chrome flow checks exact website matching, login and authenticator filling, cards, identity, hidden fields, foreign forms, frames, navigation changes and explicit save review. Its mocked bridge does not establish live Chrome behavior. A separate owner confirmation now establishes the actual popup connection; live fill and save checks are still pending.
+Desktop checks exercise actual local services, encrypted files and native framing with synthetic credentials. Browser pairing checks exercise the actual desktop handler and generated Electron launcher, including caller rejection and locked or disabled vaults. The controlled Chrome flow checks exact website matching, login and authenticator filling, cards, identity, hidden fields, foreign forms, frames, navigation changes and explicit save review. Its mocked bridge does not establish live Chrome behavior. Separate owner confirmations now establish the actual popup connection and successful login filling. Live save and denial checks through the installed popup are still pending.
 
 Real Keychain enrollment, Touch ID, an iPhone installation and a deployed Supabase gateway or Vercel function were not tested. Local passing checks do not establish an independent security audit.
 
 ## Remaining release boundaries
 
-The original Chrome bridge installation was incomplete. The owner has since loaded the extension, provided its ID and confirmed Connected after the local pairing was corrected. The browser tool still rejects internal extension management pages, so the owner supplies that UI evidence. Complete the remaining fill, save and denial checks described in [Chrome verification](CHROME-VERIFICATION.md).
+The original Chrome bridge installation was incomplete. The owner has since loaded the extension, provided its ID and confirmed Connected and successful login filling after the local pairing was corrected. The browser tool still rejects internal extension management pages, so the owner supplies that UI evidence. Complete the remaining save and denial checks described in [Chrome verification](CHROME-VERIFICATION.md).
 
 Each owner keeps a private vault and can choose their own optional hosting. The relay accepts at most 2 MiB of ciphertext and 3 MiB of JSON. Document heavy vaults can exceed that limit. The client rejects an oversized local or merged export without changing local data. See [hosted setup](HOSTED-SETUP.md).
 
@@ -62,4 +63,4 @@ Parts of the original working folder were iCloud placeholders. The candidate was
 
 All candidate source is resident and testable. The original folder and history remain preserved. The candidate uses fresh Git history with selected source only. Internal recovery records, generated screenshots, dependencies, built applications, tokens and vault data are excluded. The automated preflight checks source metadata, selected literal signatures and the release index. Its result is an assembly check, not security certification.
 
-Keep this candidate private until the remaining live Chrome check and the intended source visibility are settled. Do not describe it as a completed hosted password manager or verified iPhone release.
+Keep this candidate private until the remaining live Chrome save and denial checks and the intended source visibility are settled. Do not describe it as a completed hosted password manager or verified iPhone release.

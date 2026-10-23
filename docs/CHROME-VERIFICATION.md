@@ -2,7 +2,7 @@
 
 Verification updated: October 23, 2026.
 
-The Chrome source and desktop pairing flow pass the checks below. The owner loaded the extension manually, provided its ID and confirmed that the actual Chrome popup reports Connected after pairing on October 23. A live fill and save through that popup remain unverified.
+The Chrome source and desktop pairing flow pass the checks below. The owner loaded the extension manually, provided its ID and confirmed that the actual Chrome popup reports Connected after pairing on October 23. The owner also confirmed that selecting a saved login and clicking Fill populated the page fields successfully. Saving and locked vault denial through that actual popup remain unverified.
 
 The tested app was installed locally with the previous app preserved as a backup. The owner vault was not moved or replaced. Automated functional tests use synthetic data. A real native host probe authenticated to the running app and was rejected for an invalid item ID before any item lookup. The read only connection diagnostic opens no saved login, vault or browser token.
 
@@ -21,10 +21,11 @@ The tested app was installed locally with the previous app preserved as a backup
 | Current local connection diagnostic | Configured | All eight selected files and launcher contracts pass |
 | Actual native host to app probe | Passed | Paired caller and browser token accepted, invalid item rejected before lookup, wrong caller refused |
 | Actual Chrome popup connection | Confirmed by owner | Popup reports Connected after refreshing the corrected pairing |
+| Actual Chrome login fill | Confirmed by owner | Saved login fields filled successfully on the page |
 
 The controlled Chrome flow checks username, current password and authenticator codes, cards, identity fields, hidden fields, foreign forms, navigation changes, frames and trusted submit capture. Popup tests check explicit fill, top frame targeting, explicit save, preservation of a username during a password only update, and cancellation after navigation.
 
-The isolated pairing test uses the actual desktop handler, generated launcher, Electron runtime and local vault service. The automated Chrome flow supplies a mocked native bridge. The owner confirmation separately establishes that the regular Chrome extension can reach the registered native host and app. Filling, saving and denial checks through that actual popup still require a live controlled flow.
+The isolated pairing test uses the actual desktop handler, generated launcher, Electron runtime and local vault service. The automated Chrome flow supplies a mocked native bridge. The owner confirmation separately establishes that the regular Chrome extension can reach the registered native host and app. The owner has now also confirmed a successful fill through that actual popup. Saving and denial checks through the installed extension still require a live controlled flow.
 
 ## Read only connection diagnostic
 
@@ -66,7 +67,7 @@ An incomplete or unsafe setup returns a nonzero exit code. A configured result m
 
 ## Remaining live verification
 
-Installation and the Connected popup status are confirmed. Before claiming live autofill and saving are verified, run a controlled flow using a temporary vault and synthetic credentials. Setup instructions remain in [CHROME-SETUP.md](CHROME-SETUP.md).
+Installation, the Connected popup status and a successful login fill are confirmed by the owner. Before claiming saving and all denial boundaries are verified through the installed extension, run a controlled flow using a temporary vault and synthetic credentials. Setup instructions remain in [CHROME-SETUP.md](CHROME-SETUP.md).
 
 1. In regular Chrome, confirm JJ Vault is loaded, enabled, and has no extension errors. Pair the exact extension ID with the local native host.
 2. Run the connection diagnostic and resolve every failure. Confirm the JJ Vault app is running and browser access is enabled only for the temporary vault.
