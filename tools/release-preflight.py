@@ -34,8 +34,8 @@ PLACEHOLDER_TEAMS = {"YOURTEAMID", "EXAMPLETEAM", "ABCDEFGHIJ", "TEAMID1234", "X
 
 
 def private_artifact(path):
-    data_name = path.name.startswith(("device-secret", "session-key", "relay-token", "browser-token")) and path.suffix.lower() in {"", ".json", ".bin", ".enc", ".txt"}
-    return path.name in PRIVATE_NAMES or data_name or (path.name.startswith(".env.") and path.name != ".env.example") or path.suffix.lower() in PRIVATE_SUFFIXES
+    data_name = path.name.startswith(("device-secret", "device-pin", "session-key", "relay-token", "browser-token")) and path.suffix.lower() in {"", ".json", ".bin", ".enc", ".txt"}
+    return path.name in PRIVATE_NAMES or data_name or path.name.startswith(".device-pin-") or (path.name.startswith(".env.") and path.name != ".env.example") or path.suffix.lower() in PRIVATE_SUFFIXES
 
 
 def inventory(root):

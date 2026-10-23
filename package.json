@@ -16,6 +16,7 @@
     "test:desktop": "tsx tools/test-desktop.ts",
     "test:agents": "tsx tools/test-agent-management.ts",
     "test:session": "tsx tools/test-session-resume.ts",
+    "test:pin": "tsx tools/test-pin-unlock.ts",
     "build:extensions": "tsx extensions/browser/build.ts",
     "package:chrome": "npm run build:extensions && tsx tools/package-chrome.ts",
     "test:chrome-package": "tsx --test tools/test-chrome-package.ts",

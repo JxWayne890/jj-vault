@@ -24,3 +24,7 @@ The optional Supabase and Vercel component stores encrypted snapshots and shares
 * [Security reporting](https://github.com/JxWayne890/jj-vault/blob/main/SECURITY.md)
 
 Source is available under the MIT license. Create a test vault and verify encrypted backup restoration before moving important information.
+
+## PIN unlock source update
+
+The latest Mac source supports a chosen PIN containing 4, 5, or 6 digits for everyday unlocks. Each Mac stores its own protected enrollment. PIN setup keeps the existing vault encryption and recovery secrets. Closing or restarting requires unlocking again when PIN access is enabled, including with Never selected for idle locking. See [PIN setup and recovery](PIN-UNLOCK.md). Existing installed builds need an app update to show these controls.

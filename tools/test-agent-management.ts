@@ -85,6 +85,7 @@ try {
   await page.getByRole('button', { name: 'Create JJ Vault', exact: true }).click();
   await page.getByRole('heading', { name: 'Your vault is ready.', exact: true }).waitFor();
   await page.getByRole('button', { name: 'I saved my Secret Key', exact: true }).click();
+  await skipPinSetup(page);
   await bridge(page, 'settings', { idleMinutes: 0, notifyAssistant: false });
   const initial = await bridge(page, 'state'); port = initial.servicePort;
   assert.ok(port > 0);
@@ -243,4 +244,10 @@ try {
   await Promise.race([running.close(), new Promise<void>(resolve => { timeout = setTimeout(() => { running.process().kill('SIGKILL'); resolve(); }, 5000); })]);
   if (timeout) clearTimeout(timeout);
   await rm(data, { recursive: true, force: true });
+}
+
+
+async function skipPinSetup(page: import('@playwright/test').Page) {
+  const state = await page.evaluate(() => (window as any).vault.invoke('state'));
+  if (state.pinAvailable && !state.pinEnabled) await page.getByRole('button', { name: 'Not now', exact: true }).click();
 }

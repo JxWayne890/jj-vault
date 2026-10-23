@@ -10,6 +10,7 @@ This is an early source beta. See the [beta release](https://github.com/JxWayne8
 
 * Encrypted local passwords, private notes, documents, and other vault items.
 * Password generation, authenticator codes, password history, encrypted backups, and imports.
+* A chosen PIN of 4 to 6 digits for everyday Mac unlocks, with protected device storage and recovery using the master password.
 * Individual agent identities, selected vault access, permission levels, activity review, and revocation.
 * A Chrome extension that connects to the running desktop app for explicit fill and reviewed save actions.
 * Apple companion source and an optional encrypted hosted relay, with the limits below.
@@ -29,6 +30,14 @@ npm start
 `npm run dev` builds and starts the desktop app in one command. Build before running browser checks. See [build instructions](assets/BUILDING.md) for packaging details. The macOS package targets Apple Silicon. It is not a universal binary.
 
 Create a test vault first. The app stores its data in `~/Library/Application Support/JJ Vault`. Keep the app open and unlocked when using its local browser or agent service. For isolated development, set `JJ_VAULT_DATA_DIR` to a new private folder and `JJ_VAULT_PORT` to a free local port before starting the app.
+
+## Everyday unlock
+
+After creating a vault or unlocking an existing one, choose a PIN containing 4, 5, or 6 digits. Leading zeroes are supported. You can also enable, change, or remove it in **Settings**, **PIN unlock**. Each Mac has its own PIN.
+
+Once enabled, the PIN is the normal unlock prompt. Closing and reopening the app, quitting and restarting it, or choosing **Lock** requires unlocking again. The **Never** idle option keeps the app unlocked while it remains open, but a configured PIN prevents automatic session restoration. Repeated incorrect PINs trigger increasing delays that survive app restarts. **Use master password instead** provides recovery access. Changing an existing PIN requires the current PIN or master password. Removing it requires the master password.
+
+Keep your master password and Emergency Kit. They are still needed for recovery, restoring a backup, and setting up a new device. Restoring a backup clears the device PIN, which you can choose again after recovery. PIN setup preserves the existing encrypted vault format. See [PIN protection and limits](docs/PIN-UNLOCK.md).
 
 ## Recovery
 

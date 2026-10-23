@@ -5,7 +5,7 @@ import {homedir} from 'node:os';
 import {spawn} from 'node:child_process';
 import {mkdirSync,lstatSync,chmodSync} from 'node:fs';
 import {fileURLToPath,pathToFileURL} from 'node:url';
-import {VaultEngine,ITEM_TYPES,generatePassword,totp,importCSV,import1PUX,importBitwarden,secretBytes,isAssistantForbidden,type Envelope} from '../../../packages/core/src/index.ts';
+import {VaultEngine,ITEM_TYPES,generatePassword,totp,importCSV,import1PUX,importBitwarden,secretBytes,isAssistantForbidden,deriveKey,type Envelope} from '../../../packages/core/src/index.ts';
 import {startLocalService,randomToken,atomicOwnerWrite,readOwnerFile,syncVault,createShare} from '../../../packages/service/src/index.ts';
 import {PDFDocument,StandardFonts,rgb} from 'pdf-lib';
 import {sendConfiguredPhonePush,getPhonePushReadiness,type PhonePushReadiness} from '../../../packages/service/src/apns.ts';
@@ -13,6 +13,7 @@ import {createPasskeyProvider} from '../../../packages/service/src/passkeys.ts';
 import {timingSafeEqual} from 'node:crypto';
 import {createDeviceSecretStore} from '../../../packages/service/src/device-secret.ts';
 import {createDeviceSessionStore,deviceSessionIdentity} from '../../../packages/service/src/device-session.ts';
+import {createDevicePinStore} from '../../../packages/service/src/device-pin.ts';
 import {createPhoneSyncManager,type PhoneSyncManager} from '../../../packages/service/src/phone-sync.ts';
 import {installBrowserHost} from '../../../packages/service/src/browser-install.ts';
 import QRCode from 'qrcode';
@@ -22,6 +23,7 @@ app.setName('JJ Vault');
 const rememberOnly=process.argv.includes('--remember-secret-key');
 let rememberedSecretKey:string|undefined;let vaultIdentity:string|undefined;let deviceIdlePreference:number|undefined;let deviceSecretStore:ReturnType<typeof createDeviceSecretStore>|undefined;
 let deviceSessionStore:ReturnType<typeof createDeviceSessionStore>|undefined;let sessionIdentity:string|undefined;let hasRememberedSession=false;let quitting=false;let sessionForgetFailed=false;
+let devicePinStore:ReturnType<typeof createDevicePinStore>|undefined;
 let phonePushReadiness:PhonePushReadiness={enabled:false,configured:false};
 let phoneSync:PhoneSyncManager|undefined;
 mkdirSync(root,{recursive:true,mode:0o700});if(lstatSync(root).isSymbolicLink())throw new Error('JJ Vault data folder must be a real directory');chmodSync(root,0o700);app.setPath('userData',root);
@@ -37,7 +39,7 @@ async function loadVaultIdentity(){try{const envelope=JSON.parse(await readOwner
 async function rememberDeviceSecret(secret:string){const previousIdentity=vaultIdentity;await loadVaultIdentity();if(vaultIdentity&&previousIdentity===vaultIdentity&&rememberedSecretKey===secret)return;rememberedSecretKey=undefined;if(vaultIdentity&&deviceSecretStore?.remember(vaultIdentity,secret))rememberedSecretKey=secret;}
 async function applyDevicePreferences(){if(deviceIdlePreference!==undefined&&engine.data().settings.idleMinutes!==deviceIdlePreference){engine.data().settings.idleMinutes=deviceIdlePreference;await engine.record('settings.changed',undefined,deviceIdlePreference===0?'Automatic lock disabled':'Automatic lock updated');}}
 function rememberSessionSnapshot(){
-  if(engine.status().locked||engine.data().settings.idleMinutes!==0){forgetDeviceSession();return;}
+  if(engine.status().locked||pinStatus().pinEnabled||engine.data().settings.idleMinutes!==0){forgetDeviceSession();return;}
   if(!sessionIdentity||!deviceSessionStore)return;
   const key=engine.exportSessionKey();try{hasRememberedSession=deviceSessionStore.remember(sessionIdentity,key)||hasRememberedSession;}finally{key.fill(0);}
 }
@@ -48,14 +50,35 @@ async function rememberDeviceSession(){
   rememberSessionSnapshot();
 }
 async function resumeDeviceSession(){
-  if(deviceIdlePreference!==0||!sessionIdentity){forgetDeviceSession();return;}
+  if(pinStatus().pinEnabled||deviceIdlePreference!==0||!sessionIdentity){forgetDeviceSession();return;}
   const key=deviceSessionStore?.recall(sessionIdentity);if(!key)return;
   try{await engine.unlockWithKey(key,'deviceResume');await applyDevicePreferences();hasRememberedSession=true;rememberedLocked=false;}
   catch{forgetDeviceSession();engine.lock();}
   finally{key.fill(0);}
 }
+function pinStatus(){
+  const status=devicePinStore?.status(sessionIdentity||'');
+  return {pinEnabled:status?.enabled||false,pinAvailable:status?.available||false,...(status?.retryAt?{pinRetryAt:status.retryAt}:{})};
+}
+async function authorizePinChange(payload:any,passwordOnly=false){
+  const generation=sessionGeneration,version=engine.sessionVersion();
+  const expected=engine.exportSessionKey();let verified:Uint8Array|undefined;
+  try{
+    if(typeof payload.password==='string'&&payload.password){
+      const secret=typeof payload.secretKey==='string'&&payload.secretKey.trim()?payload.secretKey.trim():rememberedSecretKey;
+      if(!secret)throw new Error('Enter your Secret Key to verify the master password');
+      const envelope=JSON.parse(await readOwnerFile(path.join(root,'vault.json')));
+      if(deviceSessionIdentity(envelope)!==sessionIdentity)throw new Error('Vault changed. Lock and unlock again');
+      verified=await deriveKey(payload.password,secret,envelope);
+    }else if(!passwordOnly&&sessionIdentity&&typeof payload.currentPin==='string'){
+      verified=devicePinStore?.unlock(sessionIdentity,payload.currentPin);
+    }else throw new Error(passwordOnly?'Enter your master password':'Enter your current PIN or master password');
+    if(generation!==sessionGeneration||version!==engine.sessionVersion()||engine.status().locked)throw new Error('Vault is locked');
+    if(!verified||verified.length!==expected.length||!timingSafeEqual(verified,expected))throw new Error('Unable to verify. Check your unlock details');
+  }finally{expected.fill(0);verified?.fill(0);}
+}
 function visibleVaults(){const d=engine.data();return d.vaults.filter(v=>!d.settings.travelMode||v.travelSafe);}
-function state(){const status=engine.status();if(status.locked)return {...status,hasRememberedSecretKey:!!rememberedSecretKey,hasRememberedSession,types:ITEM_TYPES,biometricAvailable:process.platform==='darwin',servicePort:service?.port};const d=engine.data();const ids=new Set(visibleVaults().map(v=>v.id));const now=Date.now();return {...status,hasRememberedSecretKey:!!rememberedSecretKey,hasRememberedSession,types:ITEM_TYPES,vaults:visibleVaults(),items:d.items.filter(i=>ids.has(i.vaultId)).map(i=>({id:i.id,vaultId:i.vaultId,type:i.type,title:i.title,username:i.username,urls:i.urls,tags:i.tags,favorite:i.favorite,archived:i.archived,deletedAt:i.deletedAt,restoreUntil:i.restoreUntil,updatedAt:i.updatedAt,allowAssistant:i.allowAssistant})),settings:d.settings,tokens:d.assistantTokens.map(({id,name,clientName,permission,vaultIds,createdAt,revokedAt,calls,writeCalls})=>({id,name,clientName,permission,vaultIds,createdAt,revokedAt,readCount:calls.filter(at=>at>now-3600000).length,writeCount:writeCalls.filter(at=>at>now-3600000).length})),phonePush:phonePushReadiness,phoneSync:phoneSync?.status()||{enabled:false,running:false,paired:false},activity:d.activity.slice(-500).reverse(),servicePort:service?.port};}
+function state(){const status=engine.status();if(status.locked)return {...status,...pinStatus(),hasRememberedSecretKey:!!rememberedSecretKey,hasRememberedSession,types:ITEM_TYPES,biometricAvailable:process.platform==='darwin',servicePort:service?.port};const d=engine.data();const ids=new Set(visibleVaults().map(v=>v.id));const now=Date.now();return {...status,...pinStatus(),hasRememberedSecretKey:!!rememberedSecretKey,hasRememberedSession,types:ITEM_TYPES,vaults:visibleVaults(),items:d.items.filter(i=>ids.has(i.vaultId)).map(i=>({id:i.id,vaultId:i.vaultId,type:i.type,title:i.title,username:i.username,urls:i.urls,tags:i.tags,favorite:i.favorite,archived:i.archived,deletedAt:i.deletedAt,restoreUntil:i.restoreUntil,updatedAt:i.updatedAt,allowAssistant:i.allowAssistant})),settings:d.settings,tokens:d.assistantTokens.map(({id,name,clientName,permission,vaultIds,createdAt,revokedAt,calls,writeCalls})=>({id,name,clientName,permission,vaultIds,createdAt,revokedAt,readCount:calls.filter(at=>at>now-3600000).length,writeCount:writeCalls.filter(at=>at>now-3600000).length})),phonePush:phonePushReadiness,phoneSync:phoneSync?.status()||{enabled:false,running:false,paired:false},activity:d.activity.slice(-500).reverse(),servicePort:service?.port};}
 async function createAgent(p:any){
   if(!service)throw new Error('The local agent service is not ready');
   const helperFile=path.join(root,'agent-client.mjs');
@@ -87,12 +110,26 @@ async function invoke(action:string,p:any={}){
   if(action==='state')return state();
   if(action==='initialize'){const r=await engine.initialize(p.password);kitSecret=r.secretKey;await rememberDeviceSecret(r.secretKey);await applyDevicePreferences();await rememberDeviceSession();return {...r,state:state()};}
   if(action==='unlock'){const secret=typeof p.secretKey==='string'&&p.secretKey.trim()?p.secretKey.trim():rememberedSecretKey;if(!secret)throw new Error('Enter your Secret Key once to pair this Mac');await engine.unlock(p.password,secret);await rememberDeviceSecret(secret);await applyDevicePreferences();await rememberDeviceSession();return state();}
+  if(action==='unlockPin'){if(!sessionIdentity||!devicePinStore)throw new Error('PIN unlock is unavailable. Use your master password');const key=devicePinStore.unlock(sessionIdentity,p.pin);try{await engine.unlockWithKey(key,'pin');}finally{key.fill(0);}await applyDevicePreferences();await rememberDeviceSession();return state();}
   if(action==='biometricUnlock'){const key=await biometric('unlock');try{await engine.unlockWithKey(key);}finally{key.fill(0);}await applyDevicePreferences();await rememberDeviceSession();return state();}
   if(action==='lock'){lock();return state();}
   if(action==='touch'){engine.data();engine.touch();return true;}
-  if(action==='restore'){const generation=sessionGeneration;const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Encrypted vault',extensions:['jjbackup','jjvault','json']}]});if(r.canceled)return false;if(generation!==sessionGeneration)throw new Error('Vault is locked');const backup=JSON.parse(await readFile(r.filePaths[0],'utf8'));if(generation!==sessionGeneration)throw new Error('Vault is locked');forgetDeviceSession();await engine.importEncrypted(backup,p.password,p.secretKey);await rememberDeviceSecret(p.secretKey);await applyDevicePreferences();await rememberDeviceSession();await biometric('delete').catch(()=>{});return true;}
+  if(action==='restore'){const generation=sessionGeneration;const r=await dialog.showOpenDialog(window,{properties:['openFile'],filters:[{name:'Encrypted vault',extensions:['jjbackup','jjvault','json']}]});if(r.canceled)return false;if(generation!==sessionGeneration)throw new Error('Vault is locked');const backup=JSON.parse(await readFile(r.filePaths[0],'utf8'));if(generation!==sessionGeneration)throw new Error('Vault is locked');await engine.importEncrypted(backup,p.password,p.secretKey,()=>{if(!forgetDeviceSession())throw new Error('Unable to clear the saved session before restoring');devicePinStore?.remove();});await rememberDeviceSecret(p.secretKey);await applyDevicePreferences();await rememberDeviceSession();await biometric('delete').catch(()=>{});return true;}
   // Remaining routes require an unlocked vault.
   engine.data();
+  if(action==='setPin'){
+    if(typeof p.pin!=='string'||!/^\d{4,6}$/.test(p.pin))throw new Error('Choose a PIN with 4 to 6 digits');
+    if(p.pin!==p.confirmPin)throw new Error('The PINs do not match');
+    if(!devicePinStore||!sessionIdentity)throw new Error('Protected PIN storage is unavailable');
+    if(pinStatus().pinEnabled)await authorizePinChange(p);
+    engine.data();
+    if(!forgetDeviceSession())throw new Error('Unable to clear the saved session before enabling PIN unlock');
+    const key=engine.exportSessionKey();try{devicePinStore.set(sessionIdentity,p.pin,key);}finally{key.fill(0);}
+    await engine.record('pin.enabled');return state();
+  }
+  if(action==='removePin'){
+    await authorizePinChange(p,true);devicePinStore?.remove();await engine.record('pin.removed');return state();
+  }
   if(action==='item'){const generation=sessionGeneration;const i=itemById(p.id);await engine.record('item.viewed',i.id);const code=i.totp?await totp(i.totp):undefined;if(generation!==sessionGeneration)throw new Error('Vault is locked');itemById(p.id);return {...i,passkey:i.passkey?{...i.passkey,privateKey:undefined}:undefined,attachments:i.attachments.map(({id,name,mime})=>({id,name,mime})),currentTotp:code,assistantForbidden:isAssistantForbidden(i)};}
   if(action==='totp'){const i=itemById(p.id);return i.totp?await totp(i.totp):null;}
   if(action==='saveItem'){const old=p.item.id?itemById(p.item.id):undefined;const input={...p.item};if(old){input.attachments=old.attachments;input.passkey=old.passkey;}else{if(input.type==='passkey')throw new Error('Create a passkey from a website using the native JJ Vault provider');input.attachments=[];delete input.passkey;}const i=await engine.upsertItem(input);return i.id;}
@@ -147,6 +184,7 @@ async function invoke(action:string,p:any={}){
 }
 app.whenReady().then(async()=>{
   await mkdir(root,{recursive:true,mode:0o700});await chmod(root,0o700);
+  devicePinStore=createDevicePinStore(root,safeStorage);
   if(process.env.JJ_VAULT_REMEMBER_SECRET!=='0'){deviceSecretStore=createDeviceSecretStore(root,safeStorage);deviceSessionStore=createDeviceSessionStore(root,safeStorage);}
   if(rememberOnly){let input='';for await(const bytes of process.stdin){input+=bytes.toString();if(input.length>4096)throw new Error('Device pairing input too large');}const pairing=JSON.parse(input);input='';await loadVaultIdentity();if(!vaultIdentity||typeof pairing.secretKey!=='string'||!deviceSecretStore?.remember(vaultIdentity,pairing.secretKey))throw new Error('Unable to save Secret Key in protected device storage');if(pairing.idleMinutes===0)await atomicOwnerWrite(path.join(root,'device-preferences.json'),JSON.stringify({version:1,idleMinutes:0}));pairing.secretKey='';process.stdout.write('Device pairing saved.\n');app.exit(0);return;}
   await engine.load();await loadVaultIdentity();if(vaultIdentity)rememberedSecretKey=deviceSecretStore?.read(vaultIdentity)||undefined;
@@ -173,7 +211,7 @@ app.whenReady().then(async()=>{
   protocol.handle('jjvault',async request=>{const u=new URL(request.url);if(u.hostname!=='app')return new Response('Forbidden',{status:403});const file=path.resolve(assets,'.'+decodeURIComponent(u.pathname==='/'?'/index.html':u.pathname));if(!file.startsWith(assets+path.sep))return new Response('Forbidden',{status:403});return net.fetch(pathToFileURL(file).href);});
   session.defaultSession.setPermissionRequestHandler((_wc,_permission,callback)=>callback(false));
   window=new BrowserWindow({width:1360,height:900,minWidth:1000,minHeight:680,title:'JJ Vault',backgroundColor:'#f7f7fb',webPreferences:{preload:path.join(__dirname,'preload.cjs'),nodeIntegration:false,contextIsolation:true,sandbox:true,webSecurity:true,devTools:!app.isPackaged}});
-  window.on('close',event=>{if(!quitting&&deviceIdlePreference===0){event.preventDefault();window.hide();}});
+  window.on('close',event=>{if(!quitting&&deviceIdlePreference===0){event.preventDefault();if(pinStatus().pinEnabled)lock();window.hide();}});
   app.on('activate',()=>{if(!window.isDestroyed()){window.show();window.focus();}});
   window.webContents.setWindowOpenHandler(()=>({action:'deny'}));window.webContents.on('will-navigate',(e,url)=>{if(!url.startsWith('jjvault://app/'))e.preventDefault();});
   ipcMain.handle('vault:invoke',async(event,action,payload)=>{if(event.sender!==window.webContents||event.senderFrame!==window.webContents.mainFrame||!event.senderFrame?.url.startsWith('jjvault://app/'))throw new Error('Forbidden IPC sender');const generation=sessionGeneration;try{const value=await invoke(action,payload);if(generation!==sessionGeneration&&!['state','lock'].includes(action))throw new Error('Vault is locked');if(!['state','lock','touch'].includes(action)&&engine.status().locked)throw new Error('Vault is locked');return {ok:true,value};}catch(error){return {ok:false,error:error instanceof Error?error.message:'Unable to complete request'};}});

@@ -73,3 +73,36 @@ test('Watchtower findings, breach range sends only five hash characters and padd
 test('encrypted backup roundtrip, travel export and sync tombstones',async()=>{const f=await fixture();const v=f.engine.data().vaults[0];await f.engine.upsertItem({...newItem('login','Travel secret',v.id),password:'hidden'});v.travelSafe=false;f.engine.data().settings.travelMode=true;const sync=await f.engine.exportForSync();const syncData=await decryptData(sync,f.password,f.secretKey);assert.equal(syncData.items.length,0);assert.equal(syncData.assistantTokens.length,0);const backup=await f.engine.exportEncrypted();assert.equal((await decryptData(backup,f.password,f.secretKey)).items.length,1);const local=structuredClone(f.engine.data());const remote=structuredClone(local);local.items[0].deletedAt=new Date().toISOString();remote.items[0].updatedAt='9999';const merged=mergeData(local,remote);assert.ok(merged.items[0].deletedAt);});
 test('CSV imports quote handling and 1PUX attachments',()=>{const items=importCSV('name,url,username,password,notes\r\n"A, B",https://example.com,joe,"p""ass","line1\nline2"','v');assert.equal(items[0].password,'p"ass');assert.equal(items[0].notes,'line1\nline2');assert.equal(items[0].allowAssistant,false);const archive=zipSync({'export.data':strToU8(JSON.stringify({accounts:[{vaults:[{attrs:{name:'Personal'},items:[{categoryUuid:'001',overview:{title:'Test'},details:{loginFields:[{designation:'password',value:'fixture'}],documentAttributes:{documentId:'abc',fileName:'test.txt'}}}]}]}]})),'files/abc__test.txt':strToU8('attachment fixture')});const r=import1PUX(archive);assert.equal(r.items[0].password,'fixture');assert.equal(Buffer.from(r.items[0].attachments[0].data,'base64').toString(),'attachment fixture');});
 test('1Password current headers, original category IDs and imported password history survive saving',async()=>{const csv=importCSV('Title,Website,Username,Password,One-time password,Favorite status,Archived status\nFixture,https://example.test,user,fixture,JBSWY3DPEHPK3PXP,true,true','v');assert.equal(csv[0].totp,'JBSWY3DPEHPK3PXP');assert.ok(csv[0].favorite&&csv[0].archived);const archive=zipSync({'export.data':strToU8(JSON.stringify({accounts:[{vaults:[{attrs:{name:'Imported'},items:[{categoryUuid:'005',favIndex:1,overview:{title:'Password'},details:{password:'current',passwordHistory:[{value:'previous',time:1700000000}]}},...['105','106','109','114'].map(categoryUuid=>({categoryUuid,overview:{title:categoryUuid},details:{}}))]}]}]}))});const r=import1PUX(archive);assert.deepEqual(r.items.map(i=>i.type),['password','membership','passport','wifi','sshKey']);assert.equal(r.items[0].password,'current');assert.ok(r.items[0].favorite);const {engine}=await fixture();engine.data().vaults.push(...r.vaults);await engine.upsertItem(r.items[0]);assert.equal(engine.data().items[0].passwordHistory[0].password,'previous');});
+
+test('PIN key unlock preserves recovery secrets and records the correct unlock reason',async()=>{
+  const f=await fixture();
+  const key=f.engine.exportSessionKey();
+  const before=structuredClone(f.disk());
+  try{
+    f.engine.lock();
+    await f.engine.unlockWithKey(key,'pin');
+    assert.equal(f.engine.status().locked,false);
+    assert.ok(f.engine.data().activity.some(a=>a.action==='vault.pinUnlock'));
+    assert.equal(f.disk().id,before.id);
+    assert.deepEqual(f.disk().kdf,before.kdf);
+    f.engine.lock();
+    await f.engine.unlock(f.password,f.secretKey);
+    assert.equal(f.engine.status().locked,false);
+  }finally{key.fill(0);}
+});
+
+test('restore invalidates device credentials only after verification and before replacement',async()=>{
+  const current=await fixture(),backup=await fixture();
+  const old=structuredClone(current.disk());
+  let invalidated=false;
+  const invalidate=()=>{invalidated=true;assert.deepEqual(current.disk(),old);};
+  await assert.rejects(current.engine.importEncrypted(backup.disk(),'Incorrect recovery password',backup.secretKey,invalidate));
+  assert.equal(invalidated,false);
+  assert.deepEqual(current.disk(),old);
+  await assert.rejects(current.engine.importEncrypted(backup.disk(),backup.password,backup.secretKey,()=>{throw new Error('Unable to remove protected cache');}),/Unable to remove/);
+  assert.deepEqual(current.disk(),old);
+  assert.equal(current.engine.status().locked,false);
+  await current.engine.importEncrypted(backup.disk(),backup.password,backup.secretKey,invalidate);
+  assert.equal(invalidated,true);
+  assert.equal(current.disk().id,backup.disk().id);
+});

@@ -52,6 +52,7 @@ jobs:
           npm run test:desktop
           npm run test:agents
           npm run test:session
+          npm run test:pin
           npm run test:phone
           npm run test:browser
           npm run test:browser-pairing

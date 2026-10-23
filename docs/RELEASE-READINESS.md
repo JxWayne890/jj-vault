@@ -8,6 +8,8 @@ No Vercel or Supabase project was created or changed. The tested app was install
 
 ## Changes prepared
 
+* Mac owners can choose a PIN containing 4, 5, or 6 digits for ordinary unlocks. PIN setup, change, removal, recovery, persistent attempt delays, and reopening behavior have been verified using synthetic data. The existing encryption format and recovery secrets are preserved. See [PIN protection](PIN-UNLOCK.md).
+
 * Browser pairing now installs the private native host, launcher, configuration and Chrome manifest, with the actual service port and bundled runtime. Cancellation makes no installation.
 * Agent creation installs its helper and displays a command using the actual token folder and service port. Packaged builds use their own runtime. Commands handle spaces, apostrophes and macOS folder aliases.
 * New vault defaults and setup instructions are generic. Existing vault names, data and bundle identifiers are preserved.
@@ -21,7 +23,7 @@ No Vercel or Supabase project was created or changed. The tested app was install
 | --- | --- |
 | Fresh locked dependency installation | Passed |
 | TypeScript checking and desktop plus extension build | Passed |
-| Core, service and browser suite | 159 passed, zero failures |
+| Core, service and browser suite | 179 passed, zero failures |
 | Browser host installer | 11 passed, zero failures |
 | Packaging options and mutation guards | 11 passed, zero failures |
 | Read only browser connection diagnostic fixtures | 17 passed, zero failures |
@@ -29,6 +31,8 @@ No Vercel or Supabase project was created or changed. The tested app was install
 | Agent UI, displayed command and actual helper operations | Passed |
 | Browser Pair action and generated Electron native host | Passed in an isolated home |
 | Protected session resume and lock behavior | Passed with synthetic OS adapters |
+| PIN storage and persisted delays | 16 tests passed, including unsafe paths and failure during durable unlock reset |
+| PIN desktop setup, unlock, change, removal and recovery | Passed, including leading zeroes, damaged PIN storage, lost Secret Key cache, close and restart with Never |
 | Phone pairing UI and pinned TLS exchange | Passed with disposable fixtures |
 | Controlled Chrome content and popup flows | Passed with a mocked extension bridge |
 | Hosted relay HTTP and unit groups | 11 passed, zero failures |

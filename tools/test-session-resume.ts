@@ -98,6 +98,7 @@ async function unlock() {
   await page.getByLabel('Master password', { exact: true }).fill(master);
   await page.getByRole('button', { name: 'Unlock JJ Vault', exact: true }).click();
   await page.getByRole('button', { name: 'Lock', exact: true }).waitFor();
+  await skipPinSetup(page);
   assert.equal((await bridge('state')).locked, false);
 }
 async function assertProtectedCache() {
@@ -120,6 +121,7 @@ try {
   await page.getByRole('heading', { name: 'Your vault is ready.', exact: true }).waitFor();
   secretKey = (await page.locator('.hint.secretkey').textContent())!.trim(); assert.match(secretKey, /^JJ1\./);
   await page.getByRole('button', { name: 'I saved my Secret Key', exact: true }).click();
+  await skipPinSetup(page);
   const first = await bridge('state');
   const itemId = await bridge('saveItem', { item: { type: 'login', title: 'Retained session fixture', vaultId: first.vaults[0].id, username: 'fixture@example.test', password: fixturePassword, urls: ['https://example.test'] } });
   await settings(0);
@@ -210,4 +212,10 @@ try {
 } finally {
   await stop();
   await rm(data, { recursive: true, force: true });
+}
+
+
+async function skipPinSetup(page: import('@playwright/test').Page) {
+  const state = await page.evaluate(() => (window as any).vault.invoke('state'));
+  if (state.pinAvailable && !state.pinEnabled) await page.getByRole('button', { name: 'Not now', exact: true }).click();
 }

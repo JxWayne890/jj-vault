@@ -45,6 +45,7 @@ async function unlock(){
   if(await page.getByLabel('Secret Key',{exact:true}).isVisible())await page.getByLabel('Secret Key',{exact:true}).fill(secretKey);
   await page.getByRole('button',{name:'Unlock JJ Vault',exact:true}).click();
   await page.getByRole('button',{name:'Lock',exact:true}).waitFor();
+  await skipPinSetup(page);
 }
 async function waitFor(check:()=>Promise<boolean>,message:string){
   const end=Date.now()+10000;
@@ -104,6 +105,7 @@ try{
   assert.equal(await page.locator('#phonePairQR').count(),0);
   await page.getByLabel('Master password',{exact:true}).fill(master);await page.getByLabel('Confirm master password',{exact:true}).fill(master);await page.getByRole('button',{name:'Create JJ Vault',exact:true}).click();
   await page.getByRole('heading',{name:'Your vault is ready.',exact:true}).waitFor();secretKey=(await page.locator('.hint.secretkey').textContent())!.trim();assert.match(secretKey,/^JJ1\./);await page.getByRole('button',{name:'I saved my Secret Key',exact:true}).click();
+  await skipPinSetup(page);
   await bridge('settings',{idleMinutes:0});const initial=await bridge('state');assert.equal(initial.settings.idleMinutes,0);
   await bridge('saveItem',{item:{type:'login',title:'Phone synthetic login',vaultId:initial.vaults[0].id,username:'phone@example.invalid',password:fixturePassword,urls:['https://phone.example.invalid']}});
   await settings();assert.equal((await bridge('phoneStatus')).enabled,false);
@@ -128,4 +130,10 @@ try{
 finally{
   if(running){let timeout:NodeJS.Timeout|undefined;await Promise.race([running.close(),new Promise<void>(resolve=>{timeout=setTimeout(()=>{running!.process().kill('SIGKILL');resolve();},5000);})]);if(timeout)clearTimeout(timeout);}
   await rm(data,{recursive:true,force:true});
+}
+
+
+async function skipPinSetup(page: import('@playwright/test').Page) {
+  const state = await page.evaluate(() => (window as any).vault.invoke('state'));
+  if (state.pinAvailable && !state.pinEnabled) await page.getByRole('button', { name: 'Not now', exact: true }).click();
 }

@@ -24,6 +24,7 @@ async function masterUnlock(page: Page) {
     const message = await page.locator('#autherror').textContent().catch(() => null);
     throw new Error(`Master password only unlock failed (locked=${result.locked}, remembered=${result.hasRememberedSecretKey}): ${message || (error instanceof Error ? error.message : String(error))}`);
   });
+  await skipPinSetup(page);
   assert.equal((await state(page)).locked, false);
 }
 
@@ -58,6 +59,7 @@ try {
   const secretKey = (await page.locator('.hint.secretkey').textContent())!.trim();
   assert.match(secretKey, /^JJ1\./);
   await page.getByRole('button', { name: 'I saved my Secret Key' }).click();
+  await skipPinSetup(page);
   assert.equal((await state(page)).hasRememberedSecretKey, true);
   const protectedFile = path.join(data, 'device-secret.json');
   const protectedValue = await readFile(protectedFile, 'utf8');
@@ -125,4 +127,10 @@ try {
   await Promise.race([running.close(), new Promise<void>(resolve => { timeout = setTimeout(() => { running.process().kill('SIGKILL'); resolve(); }, 5000); })]);
   if (timeout) clearTimeout(timeout);
   await rm(data, { recursive: true, force: true });
+}
+
+
+async function skipPinSetup(page: import('@playwright/test').Page) {
+  const state = await page.evaluate(() => (window as any).vault.invoke('state'));
+  if (state.pinAvailable && !state.pinEnabled) await page.getByRole('button', { name: 'Not now', exact: true }).click();
 }

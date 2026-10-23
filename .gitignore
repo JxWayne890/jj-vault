@@ -26,6 +26,8 @@ agent-tokens/
 device-secret.json
 device-secret.bin
 device-session.json
+device-pin.json
+.device-pin-*.tmp
 session-key.json
 session-key.bin
 Emergency*Kit*

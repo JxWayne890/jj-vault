@@ -79,6 +79,7 @@ try {
   await running.evaluate(({ dialog }, filename) => { dialog.showSaveDialog = async () => ({ canceled: false, filePath: filename }); }, kitFile);
   await page.getByRole('button', { name: 'Save Emergency Kit PDF', exact: true }).click();
   await page.getByRole('heading', { name: 'Your vault is ready.' }).waitFor({ state: 'detached' });
+  await skipPinSetup(page);
   const kit = await PDFDocument.load(await readFile(kitFile)); assert.equal(kit.getPageCount(), 1);
   const contents = kit.getPage(0).node.Contents();
   const streams = contents instanceof PDFArray ? contents.asArray().map(ref => kit.context.lookup(ref)).filter((stream): stream is PDFRawStream => stream instanceof PDFRawStream) : contents instanceof PDFRawStream ? [contents] : [];
@@ -252,7 +253,9 @@ try {
   await page.locator('#autherror').filter({ hasText: /.+/ }).waitFor();
   assert.equal((await bridge(page, 'state')).locked, true);
   await page.getByLabel('Master password', { exact: true }).fill(master);
+  await page.getByLabel('Secret Key', { exact: true }).fill(secretKey);
   await page.getByRole('button', { name: 'Unlock JJ Vault', exact: true }).click();
+  await skipPinSetup(page);
   await page.locator('.itemrow').filter({ hasText: loginTitle }).waitFor();
   await selectItem(page, loginTitle);
   assert.equal((await bridge(page, 'item', { id: login.id })).password, changedPassword);
@@ -277,4 +280,10 @@ try {
   await Promise.race([running.close(), new Promise<void>(resolve => { timeout = setTimeout(() => { running.process().kill('SIGKILL'); resolve(); }, 5000); })]);
   if (timeout) clearTimeout(timeout);
   await rm(data, { recursive: true, force: true });
+}
+
+
+async function skipPinSetup(page: import('@playwright/test').Page) {
+  const state = await page.evaluate(() => (window as any).vault.invoke('state'));
+  if (state.pinAvailable && !state.pinEnabled) await page.getByRole('button', { name: 'Not now', exact: true }).click();
 }

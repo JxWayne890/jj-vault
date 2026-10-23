@@ -99,3 +99,21 @@ test('offline restore works when there is no saved device session', async t => {
   assert.equal(await readFile(f.vaultFile, 'utf8'), f.backupBytes);
   await assert.rejects(readFile(f.cacheFile), { code: 'ENOENT' });
 });
+
+test('offline restore clears a PIN cache before replacing the same vault identity', async t => {
+  const f = await fixture(t);
+  const pinFile = join(f.directory, 'device-pin.json');
+  await writeFile(pinFile, 'Synthetic protected PIN payload', { mode: 0o600 });
+  await runCli(['restore', f.backupFile], { directory: f.directory, port: await offlinePort(), output: () => {} });
+  await assert.rejects(readFile(pinFile), { code: 'ENOENT' });
+  assert.equal(await readFile(f.vaultFile, 'utf8'), f.backupBytes);
+});
+
+test('offline restore refuses replacement when a PIN cache is unsafe to remove', async t => {
+  const f = await fixture(t);
+  const pinFile = join(f.directory, 'device-pin.json');
+  await writeFile(pinFile, 'Synthetic protected PIN payload', { mode: 0o644 });
+  await assert.rejects(runCli(['restore', f.backupFile], { directory: f.directory, port: await offlinePort(), output: () => {} }));
+  assert.equal(await readFile(f.vaultFile, 'utf8'), f.currentBytes);
+  assert.equal(await readFile(pinFile, 'utf8'), 'Synthetic protected PIN payload');
+});

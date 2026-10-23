@@ -4,6 +4,7 @@ import { join, resolve } from 'node:path';
 import { isDirectExecution } from './entrypoint.ts';
 import { atomicOwnerWrite, readOwnerFile, requireStrongToken } from './security.ts';
 import { validateEnvelope } from '../../core/src/index.ts';
+import { createDevicePinStore } from './device-pin.ts';
 import { createDeviceSessionStore } from './device-session.ts';
 
 // Offline restore needs no OS encryption access, only safe cache removal.
@@ -38,6 +39,7 @@ export async function runCli(args: string[], config: { directory?: string; port?
     // Even a backup with the same key identity can roll back vault access rules.
     // Do not let a saved session reopen the replacement without an owner unlock.
     if (!createDeviceSessionStore(directory, unavailableSessionEncryption).forget()) throw new Error('Unable to clear the saved device session. Encrypted backup was not restored.');
+    createDevicePinStore(directory, unavailableSessionEncryption).remove();
     await atomicOwnerWrite(join(directory, 'vault.json'), backup); output('Encrypted backup restored. Unlock in the Mac app with its master password and Secret Key.'); return;
   }
   if (!['status', 'search', 'get', 'lock'].includes(command)) throw new Error('Unknown command');

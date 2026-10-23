@@ -122,6 +122,7 @@ try {
   await page.getByRole('button', { name: 'Create JJ Vault', exact: true }).click();
   await page.getByRole('heading', { name: 'Your vault is ready.', exact: true }).waitFor();
   await page.getByRole('button', { name: 'I saved my Secret Key', exact: true }).click();
+  await skipPinSetup(page);
   await bridge(page, 'settings', { idleMinutes: 0, notifyAssistant: false });
   const state = await bridge(page, 'state');
   assert.ok(Number.isInteger(state.servicePort) && state.servicePort > 0);
@@ -214,4 +215,10 @@ try {
   } finally {
     await rm(fixture, { recursive: true, force: true });
   }
+}
+
+
+async function skipPinSetup(page: import('@playwright/test').Page) {
+  const state = await page.evaluate(() => (window as any).vault.invoke('state'));
+  if (state.pinAvailable && !state.pinEnabled) await page.getByRole('button', { name: 'Not now', exact: true }).click();
 }
