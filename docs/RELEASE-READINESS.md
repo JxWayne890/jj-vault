@@ -1,10 +1,10 @@
 # JJ Vault release candidate
 
-Review date: October 21, 2026.
+Review updated: October 23, 2026.
 
-Status: private source candidate. A live check through the owner's loaded Chrome extension is still required before calling the Chrome installation verified. iPhone, Safari and AutoFill support remain experimental. The optional hosted component is an encrypted relay, and a full hosted password manager remains future work.
+Status: private source candidate. The owner has confirmed that the loaded Chrome popup reports Connected. Live filling and saving still require verification. iPhone, Safari and AutoFill support remain experimental. The optional hosted component is an encrypted relay, and a full hosted password manager remains future work.
 
-No Vercel or Supabase project was created or changed. The installed desktop app and local vault were preserved. Tests used disposable synthetic data and did not open saved owner credentials, real vault data or browser tokens.
+No Vercel or Supabase project was created or changed. The tested app was installed locally with the previous app backed up, and the owner vault was not moved or replaced. Functional tests used disposable synthetic data. The live native host probe requested an invalid item ID and was rejected before lookup; no saved owner credentials were retrieved.
 
 ## Changes prepared
 
@@ -21,7 +21,7 @@ No Vercel or Supabase project was created or changed. The installed desktop app 
 | --- | --- |
 | Fresh locked dependency installation | Passed |
 | TypeScript checking and desktop plus extension build | Passed |
-| Core, service and browser suite | 152 passed, zero failures |
+| Core, service and browser suite | 159 passed, zero failures |
 | Browser host installer | 11 passed, zero failures |
 | Packaging options and mutation guards | 11 passed, zero failures |
 | Read only browser connection diagnostic fixtures | 17 passed, zero failures |
@@ -39,15 +39,16 @@ No Vercel or Supabase project was created or changed. The installed desktop app 
 | Ad hoc Mac app packaging, signature and isolated startup | Passed |
 | Packaged agent helper without Node on PATH | Passed |
 | Packaged browser pairing and actual Electron bridge | Passed |
+| Actual installed Chrome popup to local app | Owner confirmed Connected |
 | npm dependency audit | Zero findings across production and build dependencies |
 
-Desktop checks exercise actual local services, encrypted files and native framing with synthetic credentials. Browser pairing checks exercise the actual desktop handler and generated Electron launcher, including caller rejection and locked or disabled vaults. The controlled Chrome flow checks exact website matching, login and authenticator filling, cards, identity, hidden fields, foreign forms, frames, navigation changes and explicit save review. Its mocked bridge does not establish that a regular Chrome profile loaded and connected the extension.
+Desktop checks exercise actual local services, encrypted files and native framing with synthetic credentials. Browser pairing checks exercise the actual desktop handler and generated Electron launcher, including caller rejection and locked or disabled vaults. The controlled Chrome flow checks exact website matching, login and authenticator filling, cards, identity, hidden fields, foreign forms, frames, navigation changes and explicit save review. Its mocked bridge does not establish live Chrome behavior. A separate owner confirmation now establishes the actual popup connection; live fill and save checks are still pending.
 
 Real Keychain enrollment, Touch ID, an iPhone installation and a deployed Supabase gateway or Vercel function were not tested. Local passing checks do not establish an independent security audit.
 
 ## Remaining release boundaries
 
-The owner's existing Chrome bridge installation was incomplete at the start of this review. Its extension ID and loading state could not be read because the browser tool rejects Chrome's internal extension management page. The installed application was preserved. Use the candidate's pairing action with the actual extension ID, then perform the live synthetic checks in [Chrome verification](CHROME-VERIFICATION.md).
+The original Chrome bridge installation was incomplete. The owner has since loaded the extension, provided its ID and confirmed Connected after the local pairing was corrected. The browser tool still rejects internal extension management pages, so the owner supplies that UI evidence. Complete the remaining fill, save and denial checks described in [Chrome verification](CHROME-VERIFICATION.md).
 
 Each owner keeps a private vault and can choose their own optional hosting. The relay accepts at most 2 MiB of ciphertext and 3 MiB of JSON. Document heavy vaults can exceed that limit. The client rejects an oversized local or merged export without changing local data. See [hosted setup](HOSTED-SETUP.md).
 

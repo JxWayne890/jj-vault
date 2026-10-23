@@ -1,27 +1,30 @@
 # Chrome verification
 
-Verification date: October 21, 2026.
+Verification updated: October 23, 2026.
 
-The candidate Chrome source and desktop pairing flow pass the checks below. Autofill through the owner's loaded Chrome extension remains unverified. The existing installation was missing four required bridge files. The browser tool rejects the internal extension management page, so the actual loading state and extension ID require an owner check.
+The Chrome source and desktop pairing flow pass the checks below. The owner loaded the extension manually, provided its ID and confirmed that the actual Chrome popup reports Connected after pairing on October 23. A live fill and save through that popup remain unverified.
 
-The installed app and regular Chrome profile were preserved. All executable tests use synthetic data. The connection diagnostic opens no saved login, vault or browser token.
+The tested app was installed locally with the previous app preserved as a backup. The owner vault was not moved or replaced. Automated functional tests use synthetic data. A real native host probe authenticated to the running app and was rejected for an invalid item ID before any item lookup. The read only connection diagnostic opens no saved login, vault or browser token.
 
 ## Completed checks
 
 | Check | Result | Evidence |
 | :--- | :--- | :--- |
 | Browser matching, field mapping and save offer tests | 10 passed | Controlled source fixtures |
+| Connection error guidance | 7 passed | Missing hosts, forbidden extension IDs, stopped apps, locked vaults and bounded fallback messages |
 | Native host installer | 11 passed | Private installation, safe paths, runtime and asar source checks |
 | Desktop Pair extension action | Passed | Actual handler, cancellation, generated native frames, wrong caller, locked and disabled vaults |
 | Controlled Chrome content and popup flow | Passed | Synthetic pages with a mocked native bridge |
 | Extension build | Passed | Bundles generated from the resident candidate |
 | Baseline installed bundle comparison | Passed | Background, content and popup hashes matched stable local assets |
 | Connection diagnostic fixtures | 17 passed | Bounded reads, permissions, origins, launchers, safe source directories and missing files |
-| Existing local connection diagnostic | Incomplete | Four bridge files missing at the start of review |
+| Current local connection diagnostic | Configured | All eight selected files and launcher contracts pass |
+| Actual native host to app probe | Passed | Paired caller and browser token accepted, invalid item rejected before lookup, wrong caller refused |
+| Actual Chrome popup connection | Confirmed by owner | Popup reports Connected after refreshing the corrected pairing |
 
 The controlled Chrome flow checks username, current password and authenticator codes, cards, identity fields, hidden fields, foreign forms, navigation changes, frames and trusted submit capture. Popup tests check explicit fill, top frame targeting, explicit save, preservation of a username during a password only update, and cancellation after navigation.
 
-The isolated pairing test uses the actual desktop handler, generated launcher, Electron runtime and local vault service. The Chrome flow supplies a mocked native bridge. These checks do not establish the regular Chrome extension runtime and registered native bridge working together.
+The isolated pairing test uses the actual desktop handler, generated launcher, Electron runtime and local vault service. The automated Chrome flow supplies a mocked native bridge. The owner confirmation separately establishes that the regular Chrome extension can reach the registered native host and app. Filling, saving and denial checks through that actual popup still require a live controlled flow.
 
 ## Read only connection diagnostic
 
@@ -49,7 +52,7 @@ Library/Application Support/JJ Vault/jjvault-browser-host
 Library/Application Support/JJ Vault/native-host.cjs
 ```
 
-These locations follow `tools/install-browser-host.ts`. The extension files exist. The Chrome native manifest, pairing configuration, launcher, and deployed native host do not exist at their expected locations on this Mac.
+These locations follow `tools/install-browser-host.ts`. The native manifest, pairing configuration, launcher and deployed host are now installed. The owner loaded the extension from the source build directory, which is supplied explicitly to the diagnostic below.
 
 For a fresh source build loaded from `dist/extensions/chrome`, supply `--extension-directory "$PWD/dist/extensions/chrome"` or use `npm run chrome:check -- --extension-directory "$PWD/dist/extensions/chrome"`. The supplied directory must remain within your home folder, with no symbolic file or directory links. Public extension build files may use mode `0644`, but must belong to you and cannot be writable by other users. Bridge installation files still require private permissions. This option changes only the four extension file locations; the native manifest and data files still use the default paths above.
 
@@ -63,7 +66,7 @@ An incomplete or unsafe setup returns a nonzero exit code. A configured result m
 
 ## Remaining live verification
 
-Before claiming the installed extension works, complete the setup described in [CHROME-SETUP.md](CHROME-SETUP.md), then run a controlled flow using a temporary vault and synthetic credentials.
+Installation and the Connected popup status are confirmed. Before claiming live autofill and saving are verified, run a controlled flow using a temporary vault and synthetic credentials. Setup instructions remain in [CHROME-SETUP.md](CHROME-SETUP.md).
 
 1. In regular Chrome, confirm JJ Vault is loaded, enabled, and has no extension errors. Pair the exact extension ID with the local native host.
 2. Run the connection diagnostic and resolve every failure. Confirm the JJ Vault app is running and browser access is enabled only for the temporary vault.

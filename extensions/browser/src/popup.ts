@@ -1,5 +1,6 @@
 import { extensionAPI, type BrowserItem, type LoginCandidate } from './types.ts';
 import { safePageUrl, sameDocument } from './matching.ts';
+import { cleanError } from './errors.ts';
 
 const api = extensionAPI();
 declare const JJVAULT_NATIVE_HOST: string;
@@ -71,14 +72,6 @@ async function fillItem(id: string) {
     if (secret) { secret.password = ''; secret.username = ''; secret.totp = ''; secret.fields?.forEach(field => { field.value = ''; }); }
     secret = undefined; busy = false;
   }
-}
-
-function cleanError(error: unknown): string {
-  const message = error instanceof Error ? error.message : 'JJ Vault could not complete the request.';
-  if (/native messaging host not found|host.*not found|not.*registered|specified native messaging host/i.test(message)) return 'Pair this extension with the Mac app using the setup steps below.';
-  if (/not.*connect|connection refused|exited|disconnected|failed to connect/i.test(message)) return 'Open JJ Vault on your Mac, unlock it, and try again.';
-  if (/locked/i.test(message)) return 'Vault is locked. Unlock JJ Vault on your Mac, then refresh.';
-  return message.slice(0, 240);
 }
 
 function showCandidate() {
