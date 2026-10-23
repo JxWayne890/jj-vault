@@ -18,7 +18,9 @@ function crc32(bytes: Uint8Array) {
 function pngIcon(size: number) {
   const raw = Buffer.alloc((size * 4 + 1) * size);
   for (let row = 0; row < size; row++) for (let column = 0; column < size; column++) {
-    const x = (column + .5) * 128 / size, y = (row + .5) * 128 / size;
+    const artworkSize = size === 128 ? 96 : size;
+    const inset = (size - artworkSize) / 2;
+    const x = (column + .5 - inset) * 128 / artworkSize, y = (row + .5 - inset) * 128 / artworkSize;
     const rounded = (cx: number, cy: number, w: number, h: number, r: number) => Math.hypot(Math.max(Math.abs(x - cx) - w / 2 + r, 0), Math.max(Math.abs(y - cy) - h / 2 + r, 0)) <= r;
     const base = rounded(64, 64, 124, 124, 30);
     const shackle = y <= 43 && y >= 8 && Math.abs(Math.hypot(x - 64, y - 29) - 18) < 5 && (y < 29 || Math.abs(x - 64) > 12);
@@ -48,7 +50,8 @@ export async function buildExtensions(destination = path.resolve(root, '../../di
     for (const size of [16, 32, 48, 128]) await writeFile(path.join(outdir, `icon${size}.png`), pngIcon(size));
     const manifest: Record<string, unknown> = {
       manifest_version: 3, name: 'JJ Vault', version: '0.1.0', description: 'Fill your logins, one time codes, cards, and addresses from your local JJ Vault.',
-      permissions: ['activeTab', 'tabs', 'nativeMessaging'], host_permissions: ['https://*/*'],
+      homepage_url: 'https://github.com/JxWayne890/jj-vault',
+      permissions: browser === 'chrome' ? ['nativeMessaging'] : ['activeTab', 'tabs', 'nativeMessaging'], host_permissions: ['https://*/*'],
       action: { default_title: 'JJ Vault', default_popup: 'popup.html', default_icon: { '16': 'icon16.png', '32': 'icon32.png' } },
       icons: { '16': 'icon16.png', '32': 'icon32.png', '48': 'icon48.png', '128': 'icon128.png' },
       background: browser === 'chrome' ? { service_worker: 'background.js' } : { scripts: ['background.js'], persistent: false },

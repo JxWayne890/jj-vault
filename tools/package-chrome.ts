@@ -98,10 +98,9 @@ async function writeArtifact(file: string, contents: string | Uint8Array): Promi
   } finally { await rm(temporary, { force: true }); }
 }
 
-/** Package only known public runtime files. Unexpected files are never opened. */
-export async function packageChromeExtension(options: ChromePackageOptions = {}): Promise<ChromePackageResult> {
+/** Read only known public runtime files. Unexpected files are never opened. */
+async function readChromeRuntime(options: ChromePackageOptions): Promise<{ files: Record<string, Uint8Array>; version: string }> {
   const sourceDirectory = path.resolve(options.sourceDirectory ?? path.join(projectRoot, 'dist/extensions/chrome'));
-  const outputDirectory = path.resolve(options.outputDirectory ?? path.join(projectRoot, 'release'));
   await inspectDirectory(sourceDirectory);
   // Validate the entire allowlist before reading even its first file.
   for (const name of runtimeFiles) {
@@ -110,7 +109,7 @@ export async function packageChromeExtension(options: ChromePackageOptions = {})
       throw new Error(`Chrome runtime file ${name} must be a regular file without symbolic links, within the package size limit.`);
     }
   }
-  const archive: Zippable = {};
+  const files: Record<string, Uint8Array> = {};
   let version = '';
   for (const name of runtimeFiles) {
     const bytes = await readRuntimeFile(path.join(sourceDirectory, name));
@@ -122,13 +121,16 @@ export async function packageChromeExtension(options: ChromePackageOptions = {})
       }
       version = manifest.version;
     }
-    archive[`${folderName}/${name}`] = bytes;
+    files[name] = bytes;
   }
-  archive[`${folderName}/INSTALL.txt`] = strToU8(installationInstructions);
+  return { files, version };
+}
+
+async function writeChromeArchive(archive: Zippable, version: string, zipName: string, options: ChromePackageOptions): Promise<ChromePackageResult> {
+  const outputDirectory = path.resolve(options.outputDirectory ?? path.join(projectRoot, 'release'));
   // A fixed timestamp makes the same built inputs produce the same archive.
   const zip = zipSync(archive, { level: 9, mtime: new Date(2000, 0, 1) });
   const sha256 = createHash('sha256').update(zip).digest('hex');
-  const zipName = `${folderName}-${version}.zip`;
   const zipPath = path.join(outputDirectory, zipName);
   const checksumPath = `${zipPath}.sha256`;
   await makeOutputDirectory(outputDirectory);
@@ -137,15 +139,32 @@ export async function packageChromeExtension(options: ChromePackageOptions = {})
   return { zipPath, checksumPath, sha256, version, entries: Object.keys(archive) };
 }
 
+/** Keep the user download layout, including its permanent folder and setup guide. */
+export async function packageChromeExtension(options: ChromePackageOptions = {}): Promise<ChromePackageResult> {
+  const { files, version } = await readChromeRuntime(options);
+  const archive: Zippable = {};
+  for (const name of runtimeFiles) archive[`${folderName}/${name}`] = files[name];
+  archive[`${folderName}/INSTALL.txt`] = strToU8(installationInstructions);
+  return writeChromeArchive(archive, version, `${folderName}-${version}.zip`, options);
+}
+
+/** Store uploads require manifest.json at the ZIP root, without the manual setup guide. */
+export async function packageChromeWebStoreExtension(options: ChromePackageOptions = {}): Promise<ChromePackageResult> {
+  const { files, version } = await readChromeRuntime(options);
+  return writeChromeArchive(files, version, `${folderName}-WebStore-${version}.zip`, options);
+}
+
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   if (args.length === 1 && args[0] === '--help') {
-    process.stdout.write('Package the already built JJ Vault Chrome extension.\n\nUsage: npm run package:chrome\n\nBuild the extension first with npm run build:extensions.\n');
+    process.stdout.write('Package the already built JJ Vault Chrome extension for manual installation and Chrome Web Store upload.\n\nUsage: npm run package:chrome\n\nBuild the extension first with npm run build:extensions.\n');
     return;
   }
   if (args.length) throw new Error('Chrome packaging does not accept command line options.');
   const result = await packageChromeExtension();
   process.stdout.write(`Chrome extension archive: ${result.zipPath}\nSHA256: ${result.sha256}\nChecksum file: ${result.checksumPath}\n`);
+  const storeResult = await packageChromeWebStoreExtension();
+  process.stdout.write(`Chrome Web Store upload archive: ${storeResult.zipPath}\nSHA256: ${storeResult.sha256}\nChecksum file: ${storeResult.checksumPath}\n`);
 }
 
 if (isDirectExecution(import.meta.url)) main().catch(error => {

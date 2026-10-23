@@ -54,6 +54,8 @@ After rebuilding or replacing the extension files with an updated download, retu
 
 This beta uses manual installation. The normal **Add to Chrome** button requires publication through the Chrome Web Store. An **Unlisted** store item can be installed by anyone with its store URL without appearing in store search. Google still reviews unlisted items under the same policies. This project has not published that store listing.
 
+The [Store submission guide](CHROME-WEB-STORE.md) contains the prepared upload format and listing materials. The [privacy policy](PRIVACY.md) describes the extension's handling of local information.
+
 See Google's [extension installation guide](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked) and [store visibility options](https://developer.chrome.com/docs/webstore/cws-dashboard-distribution). The store listing and its review are separate from making this GitHub source public.
 
 ## Source troubleshooting

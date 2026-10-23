@@ -44,6 +44,8 @@ Copy its assigned extension ID into the Mac app under **Settings**, **Browser co
 
 Source developers can build and load `dist/extensions/chrome` instead. `npm run package:chrome` builds a separate extension ZIP and SHA256 checksum in `release`. The beta ZIP is a manual installation. A Chrome Web Store listing is required for the normal **Add to Chrome** route.
 
+The [Chrome privacy policy](docs/PRIVACY.md) explains local data handling. The [Store submission guide](docs/CHROME-WEB-STORE.md) includes the upload package, listing text, permission disclosures and reviewer instructions. Preparing these files does not establish a submitted or approved store listing.
+
 An unpacked extension needs manual loading and reloading in Chrome. Keep its folder and the app in stable locations. Source test results alone do not verify a particular Chrome profile.
 
 ## Agent access

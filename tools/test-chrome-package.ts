@@ -5,7 +5,9 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { unzipSync, strFromU8 } from 'fflate';
-import { packageChromeExtension } from './package-chrome.ts';
+import { packageChromeExtension, packageChromeWebStoreExtension } from './package-chrome.ts';
+
+const packageFormats = [packageChromeExtension, packageChromeWebStoreExtension];
 
 const files = [
   'manifest.json', 'background.js', 'content.js', 'popup.js', 'popup.html', 'popup.css',
@@ -56,6 +58,40 @@ test('Chrome ZIP contains exactly the runtime allowlist and installation guide, 
   } finally { await rm(f.directory, { recursive: true, force: true }); }
 });
 
+test('Chrome Web Store ZIP has exactly the runtime files at its root and preserves the manual download', async () => {
+  const f = await fixture();
+  try {
+    await symlink(path.join(f.directory, 'does-not-exist'), path.join(f.sourceDirectory, 'browser-token'));
+    await writeFile(path.join(f.sourceDirectory, 'INSTALL.txt'), 'PRIVATE_INSTALL_FILE_MUST_NOT_SHIP');
+    await writeFile(path.join(f.sourceDirectory, 'vault.json'), 'PRIVATE_FIXTURE_MUST_NOT_SHIP');
+    await writeFile(path.join(f.sourceDirectory, 'background.js.map'), 'PRIVATE_SOURCEMAP_MUST_NOT_SHIP');
+    await mkdir(path.join(f.sourceDirectory, 'private'));
+    await writeFile(path.join(f.sourceDirectory, 'private', 'credentials.json'), 'PRIVATE_NESTED_MUST_NOT_SHIP');
+    const manual = await packageChromeExtension(f);
+    const manualBytes = await readFile(manual.zipPath);
+    const manualChecksum = await readFile(manual.checksumPath, 'utf8');
+    const result = await packageChromeWebStoreExtension(f);
+    const bytes = await readFile(result.zipPath);
+    const entries = unzipSync(bytes);
+    assert.deepEqual(Object.keys(entries).sort(), [...files].sort());
+    assert.deepEqual(result.entries.sort(), [...files].sort());
+    for (const name of files) assert.deepEqual(Buffer.from(entries[name]), await readFile(path.join(f.sourceDirectory, name)));
+    const digest = createHash('sha256').update(bytes).digest('hex');
+    assert.equal(result.sha256, digest);
+    assert.equal(result.version, '0.1.0');
+    assert.equal(path.basename(result.zipPath), 'JJ-Vault-Chrome-WebStore-0.1.0.zip');
+    assert.equal(await readFile(result.checksumPath, 'utf8'), `${digest}  JJ-Vault-Chrome-WebStore-0.1.0.zip\n`);
+    assert.deepEqual(await readFile(manual.zipPath), manualBytes);
+    assert.equal(await readFile(manual.checksumPath, 'utf8'), manualChecksum);
+    assert.equal((await packageChromeExtension(f)).sha256, manual.sha256);
+    assert.equal((await packageChromeWebStoreExtension(f)).sha256, digest);
+    assert.deepEqual((await readdir(f.outputDirectory)).sort(), [
+      'JJ-Vault-Chrome-0.1.0.zip', 'JJ-Vault-Chrome-0.1.0.zip.sha256',
+      'JJ-Vault-Chrome-WebStore-0.1.0.zip', 'JJ-Vault-Chrome-WebStore-0.1.0.zip.sha256',
+    ].sort());
+  } finally { await rm(f.directory, { recursive: true, force: true }); }
+});
+
 test('a required runtime symlink is refused before any runtime content is read or output is created', async () => {
   const f = await fixture();
   try {
@@ -63,7 +99,7 @@ test('a required runtime symlink is refused before any runtime content is read o
     await writeFile(path.join(f.sourceDirectory, 'manifest.json'), 'NOT_JSON');
     await unlink(path.join(f.sourceDirectory, 'icon128.png'));
     await symlink(path.join(f.directory, 'private-secret-not-to-read'), path.join(f.sourceDirectory, 'icon128.png'));
-    await assert.rejects(packageChromeExtension(f), /icon128.png must be a regular file without symbolic links/);
+    for (const packageExtension of packageFormats) await assert.rejects(packageExtension(f), /icon128.png must be a regular file without symbolic links/);
     await assert.rejects(readFile(path.join(f.outputDirectory, 'JJ-Vault-Chrome-0.1.0.zip')), { code: 'ENOENT' });
   } finally { await rm(f.directory, { recursive: true, force: true }); }
 });
@@ -73,11 +109,11 @@ test('source and output directory symlinks are refused without writing into thei
   try {
     const sourceLink = path.join(f.directory, 'source-link');
     await symlink(f.sourceDirectory, sourceLink, 'dir');
-    await assert.rejects(packageChromeExtension({ sourceDirectory: sourceLink, outputDirectory: f.outputDirectory }), /without symbolic links/);
+    for (const packageExtension of packageFormats) await assert.rejects(packageExtension({ sourceDirectory: sourceLink, outputDirectory: f.outputDirectory }), /without symbolic links/);
     const target = path.join(f.directory, 'unrelated');
     await mkdir(target);
     await symlink(target, f.outputDirectory, 'dir');
-    await assert.rejects(packageChromeExtension(f), /without symbolic links/);
+    for (const packageExtension of packageFormats) await assert.rejects(packageExtension(f), /without symbolic links/);
     assert.deepEqual(await readdir(target), []);
   } finally { await rm(f.directory, { recursive: true, force: true }); }
 });
@@ -86,11 +122,11 @@ test('missing runtime files and unsafe manifest versions fail before producing a
   const f = await fixture();
   try {
     await unlink(path.join(f.sourceDirectory, 'popup.js'));
-    await assert.rejects(packageChromeExtension(f), { code: 'ENOENT' });
+    for (const packageExtension of packageFormats) await assert.rejects(packageExtension(f), { code: 'ENOENT' });
     await writeFile(path.join(f.sourceDirectory, 'popup.js'), 'fixture');
     for (const version of ['../../private', '0.1.0-beta', '']) {
       await writeFile(path.join(f.sourceDirectory, 'manifest.json'), JSON.stringify({ manifest_version: 3, name: 'JJ Vault', version }));
-      await assert.rejects(packageChromeExtension(f), /manifest is invalid/);
+      for (const packageExtension of packageFormats) await assert.rejects(packageExtension(f), /manifest is invalid/);
     }
     await assert.rejects(readdir(f.outputDirectory), { code: 'ENOENT' });
   } finally { await rm(f.directory, { recursive: true, force: true }); }
